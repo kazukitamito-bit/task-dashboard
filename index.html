@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>タスク管理ダッシュボード</title>
 <style>
+  /* ── Lock Screen ── */
+  #lock-screen { position:fixed; inset:0; background:#12151e; display:flex; align-items:center; justify-content:center; z-index:9999; }
+  #lock-screen.hidden { display:none; }
+  .lock-box { text-align:center; color:#eef0f5; }
+  .lock-box h2 { font-size:18px; margin-bottom:16px; font-weight:600; }
+  .lock-box input { padding:10px 16px; border-radius:8px; border:1px solid #2a2f3e; background:#1e2230; color:#eef0f5; font-size:15px; width:200px; text-align:center; }
+  .lock-box input::placeholder { color:#505868; }
+  .lock-box button { display:block; margin:12px auto 0; padding:8px 28px; border-radius:8px; border:none; background:#2266ee; color:#fff; font-size:14px; font-weight:600; cursor:pointer; }
+  .lock-box button:hover { background:#1a5aee; }
+  .lock-box .err { color:#ff4444; font-size:12px; margin-top:8px; min-height:16px; }
+  #main-content { display:none; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Meiryo', 'メイリオ', 'Segoe UI', sans-serif; background: #f0f2f5; color: #2a2e3a; min-height: 100vh; }
 
@@ -142,6 +153,16 @@
 </head>
 <body>
 
+<div id="lock-screen">
+  <div class="lock-box">
+    <h2>🔒 パスワードを入力</h2>
+    <input type="password" id="pw-input" placeholder="パスワード" onkeydown="if(event.key==='Enter')unlock()">
+    <button onclick="unlock()">OK</button>
+    <div class="err" id="pw-err"></div>
+  </div>
+</div>
+
+<div id="main-content">
 <header>
   <div>
     <h1>&#128203; タスク管理ダッシュボード</h1>
@@ -610,6 +631,30 @@ function sw(id, btn) {
   document.getElementById('p-' + id).classList.add('on');
   btn.classList.add('on');
 }
+
+// ── Password Protection ──
+const PASS_HASH = '6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b';
+async function sha256(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function unlock() {
+  const pw = document.getElementById('pw-input').value;
+  const hash = await sha256(pw);
+  if (hash === PASS_HASH) {
+    document.getElementById('lock-screen').classList.add('hidden');
+    document.getElementById('main-content').style.display = 'block';
+    sessionStorage.setItem('dash_auth','1');
+  } else {
+    document.getElementById('pw-err').textContent = 'パスワードが違います';
+  }
+}
+// セッション中はロック解除を維持
+if (sessionStorage.getItem('dash_auth') === '1') {
+  document.getElementById('lock-screen').classList.add('hidden');
+  document.getElementById('main-content').style.display = 'block';
+}
 </script>
+</div><!-- /main-content -->
 </body>
 </html>
