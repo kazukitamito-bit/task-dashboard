@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>タスク管理ダッシュボード</title>
 <style>
-  /* ── Lock Screen ── */
   #lock-screen { position:fixed; inset:0; background:#12151e; display:flex; align-items:center; justify-content:center; z-index:9999; }
   #lock-screen.hidden { display:none; }
   .lock-box { text-align:center; color:#eef0f5; }
@@ -632,6 +631,114 @@ function sw(id, btn) {
   document.getElementById('p-' + id).classList.add('on');
   btn.classList.add('on');
 }
+
+// ── 日数自動計算 ──
+(function() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  function parseDateStr(s) {
+    if (!s) return null;
+    // "6/10", "6/10（水）", "6/10（水）締切", "2027/1/8", "5/25 超過" etc.
+    const m = s.match(/(\d{4}\/)?(\d{1,2})\/(\d{1,2})/);
+    if (!m) return null;
+    const year = m[1] ? parseInt(m[1]) : today.getFullYear();
+    return new Date(year, parseInt(m[2])-1, parseInt(m[3]));
+  }
+
+  function diffDays(dateStr) {
+    const d = parseDateStr(dateStr);
+    if (!d) return null;
+    return Math.round((d - today) / 86400000);
+  }
+
+  function daysLabel(n) {
+    if (n < 0) return '超過中';
+    if (n === 0) return '今日！';
+    return 'あと' + n + '日';
+  }
+
+  function daysColor(n) {
+    if (n < 0) return 'red';
+    if (n <= 1) return 'red';
+    if (n <= 3) return 'orange';
+    return 'yellow';
+  }
+
+  function urgentCardColor(n) {
+    if (n < 0) return 'red';
+    if (n <= 2) return 'red';
+    if (n <= 5) return 'orange';
+    return 'yellow';
+  }
+
+  // 要注意カード更新
+  document.querySelectorAll('.uc').forEach(card => {
+    const sublabel = card.querySelector('.uc-sublabel');
+    const daysEl = card.querySelector('.uc-days');
+    if (!sublabel || !daysEl) return;
+    const n = diffDays(sublabel.textContent);
+    if (n === null) return;
+    daysEl.textContent = daysLabel(n);
+    const c = urgentCardColor(n);
+    daysEl.className = 'uc-days ' + c;
+    card.className = 'uc ' + c;
+  });
+
+  // テーブルの「あとX日」セル更新
+  document.querySelectorAll('.tt td').forEach(td => {
+    const text = td.textContent.trim();
+    if (text.match(/^あと\d+日$/) || text.match(/^-?\d+日$/) || text.match(/^超過/)) {
+      // 前のセルから日付を取得
+      const prev = td.previousElementSibling;
+      if (!prev) return;
+      const n = diffDays(prev.textContent);
+      if (n === null) return;
+      if (n < 0) {
+        td.textContent = n + '日';
+        td.className = 'dl-over';
+        prev.className = 'dl-over';
+      } else if (n <= 2) {
+        td.textContent = 'あと' + n + '日';
+        td.className = 'dl-fire';
+      } else if (n <= 7) {
+        td.textContent = 'あと' + n + '日';
+        td.className = 'dl-warn';
+      } else if (n <= 30) {
+        td.textContent = 'あと' + n + '日';
+        td.className = 'dl-ok';
+      } else {
+        td.textContent = 'あと' + n + '日';
+        td.className = 'dl-far';
+      }
+    }
+  });
+
+  // クォーター進捗更新
+  const quarters = [
+    { start: new Date(2026,3,13), end: new Date(2026,5,3), idx: 0 },  // 春Q 4/13-6/3
+    { start: new Date(2026,5,4), end: new Date(2026,6,22), idx: 1 },  // 夏Q 6/4-7/22
+    { start: new Date(2026,3,13), end: new Date(2026,6,25), idx: 2 }  // 春学期 4/13-7/25
+  ];
+  document.querySelectorAll('.qcard').forEach((card, i) => {
+    if (!quarters[i]) return;
+    const q = quarters[i];
+    const total = Math.round((q.end - q.start) / 86400000);
+    const elapsed = Math.min(total, Math.max(0, Math.round((today - q.start) / 86400000)));
+    const remaining = total - elapsed;
+    const pct = Math.round(elapsed / total * 100);
+    const nums = card.querySelectorAll('.qnum');
+    if (nums[0]) nums[0].textContent = elapsed;
+    if (nums[1]) nums[1].textContent = remaining;
+    const fill = card.querySelector('.bar-fill');
+    if (fill) fill.style.width = pct + '%';
+    const pctEl = card.querySelector('.bar-pct');
+    if (pctEl) {
+      if (pct >= 100) pctEl.textContent = '100% — 完了！お疲れさま！';
+      else pctEl.textContent = pct + '% — 残り' + remaining + '日';
+    }
+  });
+})();
 
 // ── Password Protection ──
 const PASS_HASH = '6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b';
