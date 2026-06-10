@@ -138,9 +138,26 @@
     .uc-name { font-size: 12px; }
     .section-title { font-size: 9px; }
   }
+  #lock-screen { position:fixed; inset:0; background:#12151e; display:flex; align-items:center; justify-content:center; z-index:9999; }
+  #lock-screen.hidden { display:none; }
+  .lock-box { text-align:center; color:#eef0f5; }
+  .lock-box h2 { font-size:20px; margin-bottom:16px; }
+  .lock-box input { padding:10px 14px; border-radius:8px; border:1px solid #2a2f3e; background:#1e2230; color:#eef0f5; font-size:14px; width:220px; }
+  .lock-box button { margin-left:8px; padding:10px 18px; border:none; border-radius:8px; background:#4a7cff; color:#fff; font-weight:600; cursor:pointer; }
+  .lock-box .err { color:#ff6b6b; margin-top:10px; font-size:12px; }
+  #main-content { display:none; }
 </style>
 </head>
 <body>
+<div id="lock-screen">
+  <div class="lock-box">
+    <h2>&#128274; パスワードを入力</h2>
+    <input type="password" id="pw-input" placeholder="パスワード" onkeydown="if(event.key==='Enter')unlock()">
+    <button onclick="unlock()">OK</button>
+    <div class="err" id="pw-err"></div>
+  </div>
+</div>
+<div id="main-content">
 
 <header>
   <div>
@@ -417,6 +434,28 @@
             <td class="atext">自社の人事組織の失敗例・成功例をケース仕立てにして分析</td>
             <td class="mtext">7/27 23:59締切</td>
           </tr>
+          <tr>
+            <td><span class="tag">M&amp;A</span></td>
+            <td>最終レポート 提出</td>
+            <td class="dl-far">7/8</td>
+            <td class="dl-far">あと28日</td>
+            <td><span class="st st-todo">未着手</span></td>
+            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:0%"></div></div><span class="prog-n">0%</span></div></td>
+            <td>—</td>
+            <td class="atext">第9-10回授業日に提出</td>
+            <td class="mtext">7/8 授業内提出</td>
+          </tr>
+          <tr>
+            <td><span class="tag">M&amp;A</span></td>
+            <td>レポート発表</td>
+            <td class="dl-far">7/22</td>
+            <td class="dl-far">あと42日</td>
+            <td><span class="st st-todo">未着手</span></td>
+            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:0%"></div></div><span class="prog-n">0%</span></div></td>
+            <td>—</td>
+            <td class="atext">第13-14回授業でレポート発表</td>
+            <td class="mtext">7/22 授業内発表</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -683,6 +722,13 @@ function sw(id, btn) {
     }
   });
 })();
+</script>
+</div><!-- /main-content -->
+<script>
+const PASS_HASH='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b';
+async function sha256(text){const d=new TextEncoder().encode(text);const h=await crypto.subtle.digest('SHA-256',d);return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+async function unlock(){const v=document.getElementById('pw-input').value;if(await sha256(v)===PASS_HASH){document.getElementById('lock-screen').classList.add('hidden');document.getElementById('main-content').style.display='block';sessionStorage.setItem('dash_auth','1');}else{document.getElementById('pw-err').textContent='パスワードが違います';}}
+if(sessionStorage.getItem('dash_auth')==='1'){document.getElementById('lock-screen').classList.add('hidden');document.getElementById('main-content').style.display='block';}
 </script>
 </body>
 </html>
