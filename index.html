@@ -5,16 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>タスク管理ダッシュボード</title>
 <style>
-  #lock-screen { position:fixed; inset:0; background:#12151e; display:flex; align-items:center; justify-content:center; z-index:9999; }
-  #lock-screen.hidden { display:none; }
-  .lock-box { text-align:center; color:#eef0f5; }
-  .lock-box h2 { font-size:18px; margin-bottom:16px; font-weight:600; }
-  .lock-box input { padding:10px 16px; border-radius:8px; border:1px solid #2a2f3e; background:#1e2230; color:#eef0f5; font-size:15px; width:200px; text-align:center; }
-  .lock-box input::placeholder { color:#505868; }
-  .lock-box button { display:block; margin:12px auto 0; padding:8px 28px; border-radius:8px; border:none; background:#2266ee; color:#fff; font-size:14px; font-weight:600; cursor:pointer; }
-  .lock-box button:hover { background:#1a5aee; }
-  .lock-box .err { color:#ff4444; font-size:12px; margin-top:8px; min-height:16px; }
-  #main-content { display:none; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Meiryo', 'メイリオ', 'Segoe UI', sans-serif; background: #f0f2f5; color: #2a2e3a; min-height: 100vh; }
 
@@ -152,16 +142,6 @@
 </head>
 <body>
 
-<div id="lock-screen">
-  <div class="lock-box">
-    <h2>🔒 パスワードを入力</h2>
-    <input type="password" id="pw-input" placeholder="パスワード" onkeydown="if(event.key==='Enter')unlock()">
-    <button onclick="unlock()">OK</button>
-    <div class="err" id="pw-err"></div>
-  </div>
-</div>
-
-<div id="main-content">
 <header>
   <div>
     <h1>&#128203; タスク管理ダッシュボード</h1>
@@ -254,15 +234,6 @@
     </div>
 
 
-    <div class="uc red">
-      <div class="uc-top">
-        <div><div class="uc-days red">あと1日</div><div class="uc-sublabel">6/10（水）締切</div></div>
-        <span class="st st-todo">未着手</span>
-      </div>
-      <div class="uc-name">ビジネスの経済学 価格弾力性レポート</div>
-      <div class="uc-cat">&#128218; 勉強 / ビジネスの経済学</div>
-      <div class="uc-action">商品を選んで価格弾力性を測定 / PPT 2-3枚</div>
-    </div>
 
     <div class="uc orange">
       <div class="uc-top">
@@ -573,7 +544,7 @@
         <thead><tr><th>カテゴリ</th><th>タスク名</th><th>完了日</th><th>ステータス</th><th>メモ</th></tr></thead>
         <tbody>
           <tr class="row-done"><td><span class="tag">私生活</span></td><td>新北京に電話 コース確定連絡</td><td>6/9</td><td><span class="st st-done">完了</span></td><td class="mtext">コース確定済み</td></tr>
-          <tr class="row-done"><td><span class="tag">ビジネスの経済学</span></td><td>宿題（第1回）</td><td>6/9</td><td><span class="st st-done">完了</span></td><td class="mtext">6/11締切 提出済み</td></tr>
+          <tr class="row-done"><td><span class="tag">ビジネスの経済学</span></td><td>価格弾力性レポート（PPT）</td><td>6/9</td><td><span class="st st-done">完了</span></td><td class="mtext">6/10締切 提出済み</td></tr>
           <tr class="row-done"><td><span class="tag">事業再生</span></td><td>講義アンケート（第1回）</td><td>6/9</td><td><span class="st st-done">完了</span></td><td class="mtext">毎週提出</td></tr>
           <tr class="row-done"><td><span class="tag">ゼミ</span></td><td>ゼミ進捗報告発表（夏Q第1回）</td><td>6/5</td><td><span class="st st-done">完了</span></td><td class="mtext">6/5 ゼミ出席・発表完了</td></tr>
           <tr class="row-done"><td><span class="tag">論文</span></td><td>Nafesaインタビュー</td><td>6/4</td><td><span class="st st-done">完了</span></td><td class="mtext">6/4 14:30 Call完了 / インドネシア ムスリム女性</td></tr>
@@ -732,28 +703,6 @@ function sw(id, btn) {
     }
   });
 })();
-
-const PASS_HASH = '6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b';
-async function sha256(text) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-async function unlock() {
-  const pw = document.getElementById('pw-input').value;
-  const hash = await sha256(pw);
-  if (hash === PASS_HASH) {
-    document.getElementById('lock-screen').classList.add('hidden');
-    document.getElementById('main-content').style.display = 'block';
-    sessionStorage.setItem('dash_auth','1');
-  } else {
-    document.getElementById('pw-err').textContent = 'パスワードが違います';
-  }
-}
-if (sessionStorage.getItem('dash_auth') === '1') {
-  document.getElementById('lock-screen').classList.add('hidden');
-  document.getElementById('main-content').style.display = 'block';
-}
 </script>
-</div>
 </body>
 </html>
