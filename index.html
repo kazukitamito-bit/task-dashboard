@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -138,27 +138,26 @@
     .uc-name { font-size: 12px; }
     .section-title { font-size: 9px; }
   }
-  #lock-screen { position:fixed; inset:0; background:#12151e; display:flex; align-items:center; justify-content:center; z-index:9999; }
-  #lock-screen.hidden { display:none; }
-  .lock-box { text-align:center; color:#eef0f5; }
-  .lock-box h2 { font-size:20px; margin-bottom:16px; }
-  .lock-box input { padding:10px 14px; border-radius:8px; border:1px solid #2a2f3e; background:#1e2230; color:#eef0f5; font-size:14px; width:220px; }
-  .lock-box button { margin-left:8px; padding:10px 18px; border:none; border-radius:8px; background:#4a7cff; color:#fff; font-weight:600; cursor:pointer; }
-  .lock-box .err { color:#ff6b6b; margin-top:10px; font-size:12px; }
-  #main-content { display:none; }
+  #lock-screen { position:fixed;top:0;left:0;width:100%;height:100%;background:#12151e;display:flex;align-items:center;justify-content:center;z-index:9999; }
+  #lock-box { background:#1e2230;padding:32px;border-radius:12px;text-align:center;border:1px solid #2a2f3e; }
+  #lock-box h2 { color:#eef0f5;margin-bottom:16px;font-size:18px; }
+  #lock-box input { padding:10px 16px;border-radius:8px;border:1px solid #2a2f3e;background:#12151e;color:#eef0f5;font-size:14px;margin-bottom:12px;width:200px; }
+  #lock-box button { padding:10px 24px;border-radius:8px;border:none;background:#2266ee;color:#fff;font-size:14px;cursor:pointer; }
+  #lock-box button:hover { background:#1a5aee; }
+  #lock-error { color:#ff4444;font-size:12px;margin-top:8px;display:none; }
 </style>
 </head>
 <body>
+
 <div id="lock-screen">
-  <div class="lock-box">
-    <h2>Dashboard Login</h2>
-    <input type="password" id="pw-input" placeholder="パスワード" onkeydown="if(event.key==='Enter')unlock()">
-    <button onclick="unlock()">OK</button>
-    <div class="err" id="pw-err"></div>
+  <div id="lock-box">
+    <h2>&#128274; パスワードを入力</h2>
+    <input type="password" id="lock-pw" placeholder="パスワード" onkeydown="if(event.key==='Enter')unlock()">
+    <br><button onclick="unlock()">ログイン</button>
+    <div id="lock-error">パスワードが違います</div>
   </div>
 </div>
-<div id="main-content">
-
+<div id="main-content" style="display:none">
 <header>
   <div>
     <h1>&#128203; タスク管理ダッシュボード</h1>
@@ -240,6 +239,41 @@
   <div class="section-title">&#9888; 要注意タスク（締切7日以内）</div>
   <div class="urgent-row">
 
+    <div class="uc red">
+      <div class="uc-top">
+        <div><div class="uc-days red">あと2日</div><div class="uc-sublabel">7/3</div></div>
+      </div>
+      <div class="uc-name">ファイナンス 中間試験</div>
+      <div class="uc-cat">ファイナンス</div>
+      <div class="uc-action">7/3(金) 8:50〜 11-903 / 7/1 1.5h対策済 / 7/2 3h予定</div>
+    </div>
+
+    <div class="uc red">
+      <div class="uc-top">
+        <div><div class="uc-days red">あと2日</div><div class="uc-sublabel">7/3</div></div>
+      </div>
+      <div class="uc-name">事業再生 GW ケース4: JAL</div>
+      <div class="uc-cat">事業再生</div>
+      <div class="uc-action">資金繰りパート完了 / 7/1トンマナ→最終版+動画 / 7/2マージ→7/3提出</div>
+    </div>
+
+    <div class="uc orange">
+      <div class="uc-top">
+        <div><div class="uc-days orange">あと7日</div><div class="uc-sublabel">7/8</div></div>
+      </div>
+      <div class="uc-name">M&A 最終レポート</div>
+      <div class="uc-cat">M&A</div>
+      <div class="uc-action">X社→Y社 M&A計画 / A4 3頁以内 / 7/8(水)提出</div>
+    </div>
+
+    <div class="uc orange">
+      <div class="uc-top">
+        <div><div class="uc-days orange">あと7日</div><div class="uc-sublabel">7/8</div></div>
+      </div>
+      <div class="uc-name">ゲーム理論 宿題（PPT）</div>
+      <div class="uc-cat">ビジネスの経済学</div>
+      <div class="uc-action">ゲーム理論適用例 PPT2-3枚 / CourseN@vi提出</div>
+    </div>
 
   </div>
 
@@ -254,7 +288,7 @@
       <button class="tb"     onclick="sw('za',this)">&#127979; ゼミ（全体）<span class="cnt">11</span></button>
       <button class="tb"     onclick="sw('misc',this)">&#128203; その他庶務 <span class="cnt">0</span></button>
       <button class="tb"     onclick="sw('life',this)">&#127968; 私生活 <span class="cnt">1</span></button>
-      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">49</span></button>
+      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">50</span></button>
     </div>
 
     <!-- 勉強 -->
@@ -310,23 +344,23 @@
             <td><span class="tag">ファイナンス</span></td>
             <td>中間試験</td>
             <td class="dl-warn">7/3</td>
-            <td class="dl-warn">あと8日</td>
-            <td><span class="st st-todo">未着手</span></td>
-            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:0%"></div></div><span class="prog-n">0%</span></div></td>
-            <td>—</td>
+            <td class="dl-warn">あと2日</td>
+            <td><span class="st st-doing">進行中</span></td>
+            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:33%"></div></div><span class="prog-n">33%</span></div></td>
+            <td>7/2</td>
             <td class="atext">7/3(金) オンサイト 8:50〜 / 11-903</td>
-            <td class="mtext">試験対策は要計画</td>
+            <td class="mtext">7/1 1.5h完了 / 7/2 3h予定</td>
           </tr>
           <tr style="background:#fff8f8">
             <td><span class="tag">事業再生</span></td>
             <td><strong>GW ケース4: JAL再生 私的整理vs法的整理</strong></td>
             <td class="dl-warn">7/3</td>
             <td class="dl-warn">あと8日</td>
-            <td><span class="st st-todo">未着手</span></td>
-            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:0%"></div></div><span class="prog-n">0%</span></div></td>
-            <td>—</td>
-            <td class="atext">PPT 5-15頁 / 録画5-10分 / ファイル名: GroupX_JAL_XXXXX / 6/30仮提出→7/1トンマナ→最終版+動画→7/2マージ→7/3提出（まーや）</td>
-            <td class="mtext">7/3(金) 提出 / 6/30深夜 各自仮提出</td>
+            <td><span class="st st-doing">進行中</span></td>
+            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:60%"></div></div><span class="prog-n">60%</span></div></td>
+            <td>7/1</td>
+            <td class="atext">PPT 5-15頁 / 録画5-10分 / 資金繰りパート完了 / 7/1トンマナ→最終版+動画→7/2マージ→7/3提出（まーや）</td>
+            <td class="mtext">7/3(金) 提出 / 6/30仮提出済</td>
           </tr>
           <tr>
             <td><span class="tag">ビジネスの経済学</span></td>
@@ -477,6 +511,7 @@
       <table class="tt">
         <thead><tr><th>カテゴリ</th><th>タスク名</th><th>完了日</th><th>ステータス</th><th>メモ</th></tr></thead>
         <tbody>
+          <tr class="row-done"><td><span class="tag">人材・組織</span></td><td>ケース読み込み（第4回）</td><td>7/1</td><td><span class="st st-done">完了</span></td><td class="mtext">7/1完了 / 7/2授業分</td></tr>
           <tr class="row-done"><td><span class="tag">ゼミ国内旅行</span></td><td>領収書出るか問題 → 回答共有</td><td>6/27</td><td><span class="st st-done">完了</span></td><td class="mtext">6/27 回答来て共有完了</td></tr>
           <tr class="row-done"><td><span class="tag">事業再生</span></td><td>GW ケース3: 日産自動車 交渉ロールプレイ PPT提出</td><td>6/27</td><td><span class="st st-done">完了</span></td><td class="mtext">6/27 Moodle提出完了</td></tr>
           <tr class="row-done"><td><span class="tag">庶務</span></td><td>名刺受取</td><td>6/26</td><td><span class="st st-done">完了</span></td><td class="mtext">6/26 昼休みに受取完了</td></tr>
@@ -681,10 +716,18 @@ function sw(id, btn) {
 </script>
 </div><!-- /main-content -->
 <script>
-const PASS_HASH='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b';
-async function sha256(text){const d=new TextEncoder().encode(text);const h=await crypto.subtle.digest('SHA-256',d);return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');}
-async function unlock(){const v=document.getElementById('pw-input').value;if(await sha256(v)===PASS_HASH){document.getElementById('lock-screen').classList.add('hidden');document.getElementById('main-content').style.display='block';sessionStorage.setItem('dash_auth','1');}else{document.getElementById('pw-err').textContent='パスワードが違います';}}
-if(sessionStorage.getItem('dash_auth')==='1'){document.getElementById('lock-screen').classList.add('hidden');document.getElementById('main-content').style.display='block';}
+async function unlock(){
+  const pw=document.getElementById('lock-pw').value;
+  const buf=new TextEncoder().encode(pw);
+  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buf))).map(b=>b.toString(16).padStart(2,'0')).join('');
+  if(hash==='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b'){
+    document.getElementById('lock-screen').style.display='none';
+    document.getElementById('main-content').style.display='block';
+  } else {
+    document.getElementById('lock-error').style.display='block';
+  }
+}
 </script>
 </body>
 </html>
+
