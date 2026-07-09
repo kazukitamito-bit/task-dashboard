@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -138,26 +138,20 @@
     .uc-name { font-size: 12px; }
     .section-title { font-size: 9px; }
   }
-  #lock-screen { position:fixed;top:0;left:0;width:100%;height:100%;background:#12151e;display:flex;align-items:center;justify-content:center;z-index:9999; }
-  #lock-box { background:#1e2230;padding:32px;border-radius:12px;text-align:center;border:1px solid #2a2f3e; }
-  #lock-box h2 { color:#eef0f5;margin-bottom:16px;font-size:18px; }
-  #lock-box input { padding:10px 16px;border-radius:8px;border:1px solid #2a2f3e;background:#12151e;color:#eef0f5;font-size:14px;margin-bottom:12px;width:200px; }
-  #lock-box button { padding:10px 24px;border-radius:8px;border:none;background:#2266ee;color:#fff;font-size:14px;cursor:pointer; }
-  #lock-box button:hover { background:#1a5aee; }
-  #lock-error { color:#ff4444;font-size:12px;margin-top:8px;display:none; }
+</style>
+<style>
+#lock-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#1a1a2e;display:flex;align-items:center;justify-content:center;z-index:9999}
+#lock-box{background:#16213e;padding:2rem;border-radius:12px;text-align:center;box-shadow:0 0 30px rgba(0,0,0,.5)}
+#lock-box h2{color:#e94560;margin-bottom:1rem}
+#lock-box input{padding:.5rem 1rem;border:1px solid #e94560;border-radius:6px;background:#0f3460;color:#fff;font-size:1rem;margin-right:.5rem}
+#lock-box button{padding:.5rem 1.2rem;border:none;border-radius:6px;background:#e94560;color:#fff;font-size:1rem;cursor:pointer}
+#main-content{display:none}
 </style>
 </head>
 <body>
+<div id="lock-screen"><div id="lock-box"><h2>🔒 パスワードを入力</h2><input type="password" id="pw" placeholder="パスワード" onkeydown="if(event.key==='Enter')unlock()"><button onclick="unlock()">解除</button><p id="pw-err" style="color:#e94560;margin-top:.5rem;display:none">パスワードが違います</p></div></div>
+<div id="main-content">
 
-<div id="lock-screen">
-  <div id="lock-box">
-    <h2>&#128274; パスワードを入力</h2>
-    <input type="password" id="lock-pw" placeholder="パスワード" onkeydown="if(event.key==='Enter')unlock()">
-    <br><button onclick="unlock()">ログイン</button>
-    <div id="lock-error">パスワードが違います</div>
-  </div>
-</div>
-<div id="main-content" style="display:none">
 <header>
   <div>
     <h1>&#128203; タスク管理ダッシュボード</h1>
@@ -239,15 +233,6 @@
   <div class="section-title">&#9888; 要注意タスク（締切7日以内）</div>
   <div class="urgent-row">
 
-    <div class="uc red">
-      <div class="uc-top">
-        <div><div class="uc-days red">あと3日</div><div class="uc-sublabel">7/8</div></div>
-      </div>
-      <div class="uc-name">人材組織 動画視聴</div>
-      <div class="uc-cat">人材・組織</div>
-      <div class="uc-action">毎週水曜午前中締切 / 7/6(月)に実施予定</div>
-    </div>
-
     <div class="uc orange">
       <div class="uc-top">
         <div><div class="uc-days orange">あと4日</div><div class="uc-sublabel">7/9</div></div>
@@ -288,7 +273,7 @@
       <button class="tb"     onclick="sw('za',this)">&#127979; ゼミ（全体）<span class="cnt">11</span></button>
       <button class="tb"     onclick="sw('misc',this)">&#128203; その他庶務 <span class="cnt">0</span></button>
       <button class="tb"     onclick="sw('life',this)">&#127968; 私生活 <span class="cnt">1</span></button>
-      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">57</span></button>
+      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">58</span></button>
     </div>
 
     <!-- 勉強 -->
@@ -333,12 +318,12 @@
             <td><span class="tag">人材・組織</span></td>
             <td>動画視聴（毎週）</td>
             <td class="dl-ok">毎週水曜午前中</td>
-            <td class="dl-ok">次回: 7/8</td>
+            <td class="dl-ok">次回: 7/15</td>
             <td><span class="st st-ongoing">継続中</span></td>
             <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:50%"></div></div><span class="prog-n">2/4</span></div></td>
-            <td>7/6</td>
-            <td class="atext">授業後の動画を視聴 / 翌週水曜正午締切 / 月曜に実施</td>
-            <td class="mtext">第1-2回完了</td>
+            <td>7/13</td>
+            <td class="atext">授業後の動画を視聴 / 毎週水曜午前中締切 / 月曜に実施</td>
+            <td class="mtext">第1-2回完了 / 7/8分スキップ</td>
           </tr>
           <tr style="background:#fff8f8">
             <td><span class="tag">事業再生</span></td>
@@ -491,6 +476,7 @@
         <tbody>
           <tr class="row-done"><td><span class="tag">ファイナンス</span></td><td>中間試験</td><td>7/3</td><td><span class="st st-done">完了</span></td><td class="mtext">7/3 受験完了 / オンサイト 11-903</td></tr>
           <tr class="row-done"><td><span class="tag">事業再生</span></td><td>GW ケース4: JAL再生 私的整理vs法的整理</td><td>7/3</td><td><span class="st st-done">完了</span></td><td class="mtext">7/3 提出完了 / 資金繰りパート担当</td></tr>
+          <tr class="row-done"><td><span class="tag">人材・組織</span></td><td>ケース読み込み（第5回）</td><td>7/9</td><td><span class="st st-done">完了</span></td><td class="mtext">7/9完了 / 7/9授業分</td></tr>
           <tr class="row-done"><td><span class="tag">ゼミ合宿</span></td><td>軽井沢合宿 発表順番（しおり）作成</td><td>7/9</td><td><span class="st st-done">完了</span></td><td class="mtext">7/9完了</td></tr>
           <tr class="row-done"><td><span class="tag">M&A</span></td><td>最終レポート 提出</td><td>7/8</td><td><span class="st st-done">完了</span></td><td class="mtext">7/8提出完了</td></tr>
           <tr class="row-done"><td><span class="tag">ファイナンス</span></td><td>課題提出</td><td>7/7</td><td><span class="st st-done">完了</span></td><td class="mtext">7/7提出完了 / 7/24締切に対して前倒し</td></tr>
@@ -702,17 +688,16 @@ function sw(id, btn) {
 </div><!-- /main-content -->
 <script>
 async function unlock(){
-  const pw=document.getElementById('lock-pw').value;
-  const buf=new TextEncoder().encode(pw);
-  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buf))).map(b=>b.toString(16).padStart(2,'0')).join('');
+  const pw=document.getElementById('pw').value;
+  const enc=new TextEncoder().encode(pw);
+  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',enc))).map(b=>b.toString(16).padStart(2,'0')).join('');
   if(hash==='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b'){
     document.getElementById('lock-screen').style.display='none';
     document.getElementById('main-content').style.display='block';
-  } else {
-    document.getElementById('lock-error').style.display='block';
+  }else{
+    document.getElementById('pw-err').style.display='block';
   }
 }
 </script>
 </body>
 </html>
-
