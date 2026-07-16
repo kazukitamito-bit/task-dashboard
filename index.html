@@ -140,18 +140,24 @@
   }
 </style>
 <style>
-#lock-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#1a1a2e;display:flex;align-items:center;justify-content:center;z-index:9999}
-#lock-box{background:#16213e;padding:2rem;border-radius:12px;text-align:center;box-shadow:0 0 30px rgba(0,0,0,.5)}
-#lock-box h2{color:#e94560;margin-bottom:1rem}
-#lock-box input{padding:.5rem 1rem;border:1px solid #e94560;border-radius:6px;background:#0f3460;color:#fff;font-size:1rem;margin-right:.5rem}
-#lock-box button{padding:.5rem 1.2rem;border:none;border-radius:6px;background:#e94560;color:#fff;font-size:1rem;cursor:pointer}
-#main-content{display:none}
+  #lock-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#12151e;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  #lock-screen h2{color:#eef0f5;margin-bottom:20px;font-size:18px}
+  #lock-screen input{padding:10px 16px;border-radius:8px;border:1px solid #2a2f3e;background:#1e2230;color:#eef0f5;font-size:14px;width:220px;text-align:center}
+  #lock-screen button{margin-top:12px;padding:8px 24px;border-radius:8px;border:none;background:#3b82f6;color:#fff;font-size:13px;cursor:pointer}
+  #lock-screen .err{color:#f87171;font-size:12px;margin-top:8px;display:none}
+  .locked{overflow:hidden!important}
 </style>
 </head>
-<body>
-<div id="lock-screen"><div id="lock-box"><h2>🔒 パスワードを入力</h2><input type="password" id="pw" placeholder="パスワード" onkeydown="if(event.key==='Enter')unlock()"><button onclick="unlock()">解除</button><p id="pw-err" style="color:#e94560;margin-top:.5rem;display:none">パスワードが違います</p></div></div>
-<div id="main-content">
+<body class="locked">
 
+<div id="lock-screen">
+  <h2>&#128274; パスワードを入力</h2>
+  <input type="password" id="pw" placeholder="パスワード" autofocus>
+  <button onclick="unlock()">解除</button>
+  <div class="err" id="pw-err">パスワードが違います</div>
+</div>
+
+<div id="main-content" style="display:none">
 <header>
   <div>
     <h1>&#128203; タスク管理ダッシュボード</h1>
@@ -235,61 +241,52 @@
 
     <div class="uc red">
       <div class="uc-top">
-        <div><div class="uc-days red">明日</div><div class="uc-sublabel">7/16</div></div>
-      </div>
-      <div class="uc-name">人材組織 GDコメント提出</div>
-      <div class="uc-cat">人材・組織</div>
-      <div class="uc-action">7/16(木) 授業当日にWord提出</div>
-    </div>
-
-    <div class="uc red">
-      <div class="uc-top">
-        <div><div class="uc-days red">あと2日</div><div class="uc-sublabel">7/17</div></div>
+        <div><div class="uc-days red">今日</div><div class="uc-sublabel">7/17</div></div>
       </div>
       <div class="uc-name">マーケリサーチ 中間試験</div>
       <div class="uc-cat">マーケティングリサーチ</div>
-      <div class="uc-action">7/17(金) オンサイト / 持ち込み可</div>
+      <div class="uc-action">7/17(木) オンサイト / 持ち込み可</div>
     </div>
 
     <div class="uc red">
       <div class="uc-top">
-        <div><div class="uc-days red">あと2日</div><div class="uc-sublabel">7/17</div></div>
+        <div><div class="uc-days red">今日</div><div class="uc-sublabel">7/17</div></div>
       </div>
       <div class="uc-name">ファイナンス テスト</div>
       <div class="uc-cat">ファイナンス</div>
-      <div class="uc-action">7/17(金) オンサイト</div>
+      <div class="uc-action">7/17(木) オンサイト</div>
     </div>
 
-    <div class="uc orange">
+    <div class="uc red">
       <div class="uc-top">
-        <div><div class="uc-days orange">あと3日</div><div class="uc-sublabel">7/18</div></div>
+        <div><div class="uc-days red">明日</div><div class="uc-sublabel">7/18</div></div>
       </div>
       <div class="uc-name">事業再生 テスト</div>
       <div class="uc-cat">事業再生</div>
       <div class="uc-action">7/18(土) オンサイト</div>
     </div>
 
-    <div class="uc orange">
+    <div class="uc red">
       <div class="uc-top">
-        <div><div class="uc-days orange">あと3日</div><div class="uc-sublabel">7/18</div></div>
+        <div><div class="uc-days red">明日</div><div class="uc-sublabel">7/18</div></div>
       </div>
       <div class="uc-name">ビジネスの経済学 テスト</div>
       <div class="uc-cat">ビジネスの経済学</div>
       <div class="uc-action">7/18(土) オンサイト</div>
     </div>
 
-    <div class="uc orange">
+    <div class="uc red">
       <div class="uc-top">
-        <div><div class="uc-days orange">あと3日</div><div class="uc-sublabel">7/18</div></div>
+        <div><div class="uc-days red">明日</div><div class="uc-sublabel">7/18</div></div>
       </div>
       <div class="uc-name">事業再生 講義アンケート</div>
       <div class="uc-cat">事業再生</div>
       <div class="uc-action">毎週土曜 / 7/18(土)授業当日に提出</div>
     </div>
 
-    <div class="uc yellow">
+    <div class="uc orange">
       <div class="uc-top">
-        <div><div class="uc-days yellow">あと5日</div><div class="uc-sublabel">7/20</div></div>
+        <div><div class="uc-days orange">あと3日</div><div class="uc-sublabel">7/20</div></div>
       </div>
       <div class="uc-name">人材組織 最終レポート（仮提出）</div>
       <div class="uc-cat">人材・組織</div>
@@ -298,7 +295,7 @@
 
     <div class="uc yellow">
       <div class="uc-top">
-        <div><div class="uc-days yellow">あと7日</div><div class="uc-sublabel">7/22</div></div>
+        <div><div class="uc-days yellow">あと5日</div><div class="uc-sublabel">7/22</div></div>
       </div>
       <div class="uc-name">M&A レポート発表</div>
       <div class="uc-cat">M&amp;A</div>
@@ -318,7 +315,7 @@
       <button class="tb"     onclick="sw('za',this)">&#127979; ゼミ（全体）<span class="cnt">11</span></button>
       <button class="tb"     onclick="sw('misc',this)">&#128203; その他庶務 <span class="cnt">0</span></button>
       <button class="tb"     onclick="sw('life',this)">&#127968; 私生活 <span class="cnt">1</span></button>
-      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">65</span></button>
+      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">66</span></button>
     </div>
 
     <!-- 勉強 -->
@@ -329,13 +326,13 @@
           <tr>
             <td><span class="tag">人材・組織</span></td>
             <td>GDコメント提出（毎週）</td>
-            <td class="dl-warn">毎週木曜</td>
-            <td>次回: 7/16</td>
+            <td class="dl-ok">毎週木曜</td>
+            <td class="dl-ok">次回: 7/23</td>
             <td><span class="st st-ongoing">継続中</span></td>
-            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:71%"></div></div><span class="prog-n">5/7</span></div></td>
-            <td>7/9</td>
+            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:86%"></div></div><span class="prog-n">6/7</span></div></td>
+            <td>7/16</td>
             <td class="atext">授業当日（木曜）にGD貢献者とコメントをWord提出</td>
-            <td class="mtext">第1-4回提出済み</td>
+            <td class="mtext">第1-6回提出済み</td>
           </tr>
           <tr>
             <td><span class="tag">事業再生</span></td>
@@ -545,6 +542,7 @@
           <tr class="row-done"><td><span class="tag">事業再生</span></td><td>Case6 個人課題（PPT）提出</td><td>7/14</td><td><span class="st st-done">完了</span></td><td class="mtext">7/13-14作成 / チーム共有済み</td></tr>
           <tr class="row-done"><td><span class="tag">事業再生</span></td><td>講義アンケート（第5回）</td><td>7/11</td><td><span class="st st-done">完了</span></td><td class="mtext">7/11授業分 提出済み</td></tr>
           <tr class="row-done"><td><span class="tag">人材・組織</span></td><td>動画視聴（第3回）</td><td>7/14</td><td><span class="st st-done">完了</span></td><td class="mtext">7/14完了</td></tr>
+          <tr class="row-done"><td><span class="tag">人材・組織</span></td><td>GDコメント提出 第6回</td><td>7/16</td><td><span class="st st-done">完了</span></td><td class="mtext">7/16授業分 提出済み</td></tr>
           <tr class="row-done"><td><span class="tag">事業再生</span></td><td>GW ケース5: 三菱自動車 動画録音+提出</td><td>7/10</td><td><span class="st st-done">完了</span></td><td class="mtext">7/10朝 録音提出 / コスト削減パート担当</td></tr>
           <tr class="row-done"><td><span class="tag">ファイナンス</span></td><td>中間試験</td><td>7/3</td><td><span class="st st-done">完了</span></td><td class="mtext">7/3 受験完了 / オンサイト 11-903</td></tr>
           <tr class="row-done"><td><span class="tag">事業再生</span></td><td>GW ケース4: JAL再生 私的整理vs法的整理</td><td>7/3</td><td><span class="st st-done">完了</span></td><td class="mtext">7/3 提出完了 / 資金繰りパート担当</td></tr>
@@ -764,14 +762,17 @@ function sw(id, btn) {
 async function unlock(){
   const pw=document.getElementById('pw').value;
   const enc=new TextEncoder().encode(pw);
-  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',enc))).map(b=>b.toString(16).padStart(2,'0')).join('');
-  if(hash==='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b'){
+  const hash=await crypto.subtle.digest('SHA-256',enc);
+  const hex=[...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('');
+  if(hex==='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b'){
     document.getElementById('lock-screen').style.display='none';
     document.getElementById('main-content').style.display='block';
+    document.body.classList.remove('locked');
   }else{
     document.getElementById('pw-err').style.display='block';
   }
 }
+document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')unlock()});
 </script>
 </body>
 </html>
