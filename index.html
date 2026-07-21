@@ -272,7 +272,7 @@
   <div class="section-title">&#128194; タスク一覧</div>
   <div class="tabs-wrap">
     <div class="tabs-nav">
-      <button class="tb on"  onclick="sw('study',this)">&#128218; 勉強 <span class="cnt">13</span></button>
+      <button class="tb on"  onclick="sw('study',this)">&#128218; 勉強 <span class="cnt">14</span></button>
       <button class="tb"     onclick="sw('thesis',this)">&#128221; 論文 <span class="cnt">7</span></button>
       <button class="tb"     onclick="sw('thesis-p',this)">&#128203; 論文（個人）<span class="cnt">5</span></button>
       <button class="tb"     onclick="sw('zp',this)">&#127959; ゼミ国内旅行 <span class="cnt">0</span></button>
@@ -429,6 +429,17 @@
             <td>—</td>
             <td class="atext">7/21提出完了</td>
             <td class="mtext">ueoka@juno.ocn.ne.jp</td>
+          </tr>
+          <tr>
+            <td><span class="tag">英語</span></td>
+            <td>英語勉強のやることを決める</td>
+            <td class="dl-fire">7/22</td>
+            <td class="dl-fire">明日</td>
+            <td><span class="st st-todo">未着手</span></td>
+            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:0%"></div></div><span class="prog-n">0%</span></div></td>
+            <td>7/22</td>
+            <td class="atext">勉強計画の策定 / 30分</td>
+            <td class="mtext"></td>
           </tr>
         </tbody>
       </table>
@@ -773,18 +784,15 @@ function sw(id, btn) {
 <script>
 async function unlock(){
   const pw=document.getElementById('pw').value;
-  const enc=new TextEncoder().encode(pw);
-  const hash=await crypto.subtle.digest('SHA-256',enc);
-  const hex=[...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('');
-  if(hex==='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b'){
+  const buf=new TextEncoder().encode(pw);
+  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buf))).map(b=>b.toString(16).padStart(2,'0')).join('');
+  if(hash==='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b'){
     document.getElementById('lock-screen').style.display='none';
-    document.getElementById('main-content').style.display='block';
+    document.getElementById('main-content').style.display='';
     document.body.classList.remove('locked');
-  }else{
-    document.getElementById('pw-err').style.display='block';
-  }
+  }else{document.getElementById('pw-err').style.display='block';}
 }
-document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')unlock()});
+document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')unlock();});
 </script>
 </body>
 </html>
