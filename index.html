@@ -257,6 +257,7 @@
       <button class="tb"     onclick="sw('zp',this)">&#127959; ゼミ国内旅行 <span class="cnt">0</span></button>
       <button class="tb"     onclick="sw('za',this)">&#127979; ゼミ（全体）<span class="cnt">14</span></button>
       <button class="tb"     onclick="sw('misc',this)">&#128203; その他庶務 <span class="cnt">0</span></button>
+      <button class="tb"     onclick="sw('jbcc',this)">&#127942; JBCC <span class="cnt">4</span></button>
       <button class="tb"     onclick="sw('life',this)">&#127968; 私生活 <span class="cnt">1</span></button>
       <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">85</span></button>
     </div>
@@ -366,6 +367,22 @@
       <table class="tt">
         <thead><tr><th>種別</th><th>タスク名</th><th>期限</th><th>残り</th><th>ステータス</th><th>次のアクション</th><th>メモ</th></tr></thead>
         <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- JBCC -->
+    <div id="p-jbcc" class="tab-pane">
+      <table class="tt">
+        <thead><tr><th>フェーズ</th><th>タスク名</th><th>締切</th><th>残り</th><th>ステータス</th><th>次のアクション</th><th>メモ</th></tr></thead>
+        <tbody>
+          <tr class="row-done"><td><span class="tag">エントリー</span></td><td>エントリー受付開始</td><td>6/1</td><td>—</td><td><span class="st st-done">完了</span></td><td class="atext">エントリー済み</td><td class="mtext">6/1(月) 19:00〜</td></tr>
+          <tr class="row-done"><td><span class="tag">エントリー</span></td><td>エントリー締切</td><td>7/24</td><td>—</td><td><span class="st st-done">完了</span></td><td class="atext">締切通過</td><td class="mtext">7/24(金) 23:59</td></tr>
+          <tr class="row-done"><td><span class="tag">予選</span></td><td>予選開始・ケース発表</td><td>7/25</td><td>—</td><td><span class="st st-done">完了</span></td><td class="atext">ケース確認済み</td><td class="mtext">7/25(土)</td></tr>
+          <tr><td><span class="tag">予選</span></td><td>予選資料提出締切</td><td class="dl-warn">9/5</td><td class="dl-warn">あと41日</td><td><span class="st st-todo">未着手</span></td><td class="atext">ケース分析・資料作成</td><td class="mtext">9/5(土) 23:59</td></tr>
+          <tr><td><span class="tag">本選</span></td><td>本選出場者発表</td><td class="dl-far">10/3</td><td class="dl-far">あと69日</td><td><span class="st st-todo">未着手</span></td><td class="atext">結果待ち</td><td class="mtext">10/3(土)</td></tr>
+          <tr><td><span class="tag">本選</span></td><td>本選資料提出</td><td class="dl-far">11/8</td><td class="dl-far">あと105日</td><td><span class="st st-todo">未着手</span></td><td class="atext">本選進出時</td><td class="mtext">11/8(日)</td></tr>
+          <tr><td><span class="tag">本選</span></td><td>本選（準決勝+決勝）</td><td class="dl-far">11/15</td><td class="dl-far">あと112日</td><td><span class="st st-todo">未着手</span></td><td class="atext">本選進出時</td><td class="mtext">11/15(日)</td></tr>
         </tbody>
       </table>
     </div>
