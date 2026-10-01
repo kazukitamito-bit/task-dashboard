@@ -2,6 +2,20 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<script>
+(function(){
+  var h='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b';
+  var k=sessionStorage.getItem('dk');
+  if(k===h)return;
+  var p=prompt('パスワードを入力してください');
+  if(!p){document.documentElement.innerHTML='';return;}
+  crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)).then(function(buf){
+    var a=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+    if(a===h){sessionStorage.setItem('dk',h);}
+    else{document.documentElement.innerHTML='<body style=\"text-align:center;padding:60px;font-family:sans-serif\"><h2>パスワードが違います</h2><p>ページを再読み込みしてください</p></body>';}
+  });
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>タスク管理ダッシュボード</title>
 <style>
@@ -139,28 +153,8 @@
     .section-title { font-size: 9px; }
   }
 </style>
-<style>
-  .lock-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#12151e;display:flex;align-items:center;justify-content:center;z-index:9999;}
-  .lock-box{background:#1e2230;border:1px solid #2a2f3e;border-radius:12px;padding:36px 32px;text-align:center;max-width:340px;width:90%;}
-  .lock-box h2{color:#eef0f5;font-size:18px;margin-bottom:18px;}
-  .lock-box input{width:100%;padding:10px 14px;border:1px solid #3a4050;border-radius:8px;background:#282c3a;color:#eef0f5;font-size:14px;margin-bottom:10px;outline:none;}
-  .lock-box input:focus{border-color:#5580ee;}
-  .lock-box button{width:100%;padding:10px;background:#2266ee;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;}
-  .lock-box button:hover{background:#1a5aee;}
-  .lock-err{color:#ff4444;font-size:12px;display:none;margin-top:8px;}
-  body.locked{overflow:hidden;}
-</style>
 </head>
-<body class="locked">
-<div id="lock-screen" class="lock-overlay">
-  <div class="lock-box">
-    <h2>&#128274; パスワードを入力</h2>
-    <input type="password" id="pw" placeholder="パスワード">
-    <button onclick="unlock()">ロック解除</button>
-    <div class="lock-err" id="pw-err">パスワードが違います</div>
-  </div>
-</div>
-<div id="main-content" style="display:none">
+<body>
 
 <header>
   <div>
@@ -189,52 +183,52 @@
   <div class="section-title">&#128197; クォーター状況</div>
   <div class="quarters">
 
-    <div class="qcard">
+    <div class="qcard" id="qcard-aki">
       <div class="qcard-top">
         <div>
-          <div class="qcard-name">春クォーター</div>
-          <div class="qcard-dates">4/13 〜 6/3（52日間）</div>
-        </div>
-        <span class="badge b-done">完了</span>
-      </div>
-      <div class="qstats">
-        <div class="qstat"><div class="qnum" style="color:#00a854">52</div><div class="qlabel">経過日数</div></div>
-        <div class="qstat"><div class="qnum" style="color:#ccc">0</div><div class="qlabel">残り日数</div></div>
-      </div>
-      <div class="bar-bg"><div class="bar-fill fill-g" style="width:100%"></div></div>
-      <div class="bar-pct">100% — 完了！お疲れさま！</div>
-    </div>
-
-    <div class="qcard">
-      <div class="qcard-top">
-        <div>
-          <div class="qcard-name">夏クォーター</div>
-          <div class="qcard-dates">6/4 〜 7/22（49日間）</div>
+          <div class="qcard-name">秋クォーター</div>
+          <div class="qcard-dates">10/1 〜 11/21（52日間）</div>
         </div>
         <span class="badge b-active">進行中</span>
       </div>
       <div class="qstats">
-        <div class="qstat"><div class="qnum" style="color:#1a5aee">2</div><div class="qlabel">経過日数</div></div>
-        <div class="qstat"><div class="qnum" style="color:#f39c12">47</div><div class="qlabel">残り日数</div></div>
+        <div class="qstat"><div class="qnum" style="color:#1a5aee" id="aki-elapsed">1</div><div class="qlabel">経過日数</div></div>
+        <div class="qstat"><div class="qnum" style="color:#f39c12" id="aki-remain">51</div><div class="qlabel">残り日数</div></div>
       </div>
-      <div class="bar-bg"><div class="bar-fill fill-b" style="width:4.1%"></div></div>
-      <div class="bar-pct">4.1% — 残り47日</div>
+      <div class="bar-bg"><div class="bar-fill fill-b" id="aki-bar" style="width:1.9%"></div></div>
+      <div class="bar-pct" id="aki-pct">1.9% — 残り51日</div>
     </div>
 
-    <div class="qcard">
+    <div class="qcard" id="qcard-fuyu">
       <div class="qcard-top">
         <div>
-          <div class="qcard-name">春学期（全体）</div>
-          <div class="qcard-dates">4/13 〜 7/25（103日間）</div>
+          <div class="qcard-name">冬クォーター</div>
+          <div class="qcard-dates">11/23 〜 2027/1/26（65日間）</div>
+        </div>
+        <span class="badge b-soon">まもなく</span>
+      </div>
+      <div class="qstats">
+        <div class="qstat"><div class="qnum" style="color:#ccc" id="fuyu-elapsed">0</div><div class="qlabel">経過日数</div></div>
+        <div class="qstat"><div class="qnum" style="color:#f39c12" id="fuyu-remain">65</div><div class="qlabel">残り日数</div></div>
+      </div>
+      <div class="bar-bg"><div class="bar-fill fill-y" id="fuyu-bar" style="width:0%"></div></div>
+      <div class="bar-pct" id="fuyu-pct">0% — 11/23開始</div>
+    </div>
+
+    <div class="qcard" id="qcard-all">
+      <div class="qcard-top">
+        <div>
+          <div class="qcard-name">秋学期（全体）</div>
+          <div class="qcard-dates">10/1 〜 2027/1/26（118日間）</div>
         </div>
         <span class="badge b-active">進行中</span>
       </div>
       <div class="qstats">
-        <div class="qstat"><div class="qnum" style="color:#2980b9">53</div><div class="qlabel">経過日数</div></div>
-        <div class="qstat"><div class="qnum" style="color:#e74c3c">50</div><div class="qlabel">残り日数</div></div>
+        <div class="qstat"><div class="qnum" style="color:#2980b9" id="all-elapsed">1</div><div class="qlabel">経過日数</div></div>
+        <div class="qstat"><div class="qnum" style="color:#e74c3c" id="all-remain">117</div><div class="qlabel">残り日数</div></div>
       </div>
-      <div class="bar-bg"><div class="bar-fill fill-b" style="width:51.5%"></div></div>
-      <div class="bar-pct">51.5% — 折り返し通過！</div>
+      <div class="bar-bg"><div class="bar-fill fill-b" id="all-bar" style="width:0.8%"></div></div>
+      <div class="bar-pct" id="all-pct">0.8% — 残り117日</div>
     </div>
 
   </div>
@@ -242,24 +236,32 @@
   <!-- 要注意 -->
   <div class="section-title">&#9888; 要注意タスク（締切7日以内）</div>
   <div class="urgent-row">
-
-
-
+    <div class="uc red">
+      <div class="uc-top"><div><div class="uc-days red">1</div><div class="uc-sublabel" data-deadline="2026-10-02">10/2 まで</div></div></div>
+      <div class="uc-name">職業訓練支援金 証明書入手</div>
+      <div class="uc-cat">私生活</div>
+      <div class="uc-action">早稲田で証明書をもらう</div>
+    </div>
+    <div class="uc orange">
+      <div class="uc-top"><div><div class="uc-days orange">5</div><div class="uc-sublabel" data-deadline="2026-10-06">10/6 まで</div></div></div>
+      <div class="uc-name">職業訓練支援金 申請</div>
+      <div class="uc-cat">私生活</div>
+      <div class="uc-action">池袋ハローワークで申請（13:30〜）</div>
+    </div>
   </div>
 
   <!-- タスク一覧 -->
   <div class="section-title">&#128194; タスク一覧</div>
   <div class="tabs-wrap">
     <div class="tabs-nav">
-      <button class="tb on"  onclick="sw('study',this)">&#128218; 勉強 <span class="cnt">1</span></button>
+      <button class="tb on"  onclick="sw('study',this)">&#128218; 勉強 <span class="cnt">0</span></button>
       <button class="tb"     onclick="sw('thesis',this)">&#128221; 論文 <span class="cnt">6</span></button>
-      <button class="tb"     onclick="sw('thesis-p',this)">&#128203; 論文（個人）<span class="cnt">5</span></button>
-      <button class="tb"     onclick="sw('zp',this)">&#127959; ゼミ国内旅行 <span class="cnt">0</span></button>
-      <button class="tb"     onclick="sw('za',this)">&#127979; ゼミ（全体）<span class="cnt">14</span></button>
+      <button class="tb"     onclick="sw('za',this)">&#127979; ゼミ（全体）<span class="cnt">8</span></button>
       <button class="tb"     onclick="sw('misc',this)">&#128203; その他庶務 <span class="cnt">0</span></button>
-      <button class="tb"     onclick="sw('jbcc',this)">&#127942; JBCC <span class="cnt">4</span></button>
-      <button class="tb"     onclick="sw('life',this)">&#127968; 私生活 <span class="cnt">2</span></button>
-      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">85</span></button>
+      <button class="tb"     onclick="sw('jbcc',this)">&#127942; JBCC <span class="cnt">2</span></button>
+      <button class="tb"     onclick="sw('life',this)">&#127968; 私生活 <span class="cnt">4</span></button>
+      <button class="tb"     onclick="sw('vocab',this)">&#128218; 英単語STOCK <span class="cnt">65</span></button>
+      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">92</span></button>
     </div>
 
     <!-- 勉強 -->
@@ -267,17 +269,6 @@
       <table class="tt">
         <thead><tr><th>科目</th><th>タスク名</th><th>締切</th><th>残り</th><th>ステータス</th><th>進捗</th><th>次回</th><th>次のアクション</th><th>メモ</th></tr></thead>
         <tbody>
-          <tr>
-            <td><span class="tag">英語</span></td>
-            <td>英語勉強のやることを決める</td>
-            <td class="dl-over">7/22</td>
-            <td class="dl-over">期限超過</td>
-            <td><span class="st st-todo">未着手</span></td>
-            <td><div class="prog"><div class="prog-bg"><div class="prog-fill" style="width:0%"></div></div><span class="prog-n">0%</span></div></td>
-            <td>7/23</td>
-            <td class="atext">勉強計画の策定 / 30分</td>
-            <td class="mtext"></td>
-          </tr>
         </tbody>
       </table>
     </div>
@@ -289,52 +280,11 @@
         <tbody>
           <tr><td><span class="tag">日常</span></td><td>論文ルーティン（毎朝30min）</td><td class="dl-far">—</td><td>—</td><td><span class="st st-ongoing">継続中</span></td><td>毎朝</td><td class="atext">CiNii/Web of Science検索</td><td class="mtext"></td></tr>
           <tr class="row-done"><td><span class="tag">マイル</span></td><td>論文計画書 提出</td><td>7/22</td><td>—</td><td><span class="st st-done">完了</span></td><td>7/22</td><td class="atext">提出完了</td><td class="mtext">7/22 提出完了</td></tr>
-          <tr><td><span class="tag">マイル</span></td><td>論文PR完成（長谷川先生向け）</td><td class="dl-far">10/30</td><td class="dl-far">あと147日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">10月に向けて調査開始</td><td class="mtext"></td></tr>
-          <tr style="background:#fff5f5"><td><span class="tag">マイル</span></td><td><strong>論文1次完成（50〜60%）</strong></td><td class="dl-far">11/27</td><td class="dl-far">あと175日</td><td><span class="st st-must">超マスト</span></td><td>—</td><td class="atext">11月に集中執筆</td><td class="mtext">最重要マイル</td></tr>
-          <tr><td><span class="tag">マイル</span></td><td>論文2次完成・提出</td><td class="dl-far">12/18</td><td class="dl-far">あと196日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">12月上旬に最終仕上げ</td><td class="mtext">ここで完成！</td></tr>
-          <tr><td><span class="tag">提出</span></td><td>論文提出（ゼミ締切）</td><td class="dl-far">2027/1/8</td><td class="dl-far">あと217日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">12/18完成後に提出</td><td class="mtext">正式締切1/9</td></tr>
-          <tr><td><span class="tag">審査</span></td><td>公開審査会</td><td class="dl-far">2027/1/24</td><td class="dl-far">あと233日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">発表準備</td><td class="mtext"></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- 論文（個人） -->
-    <div id="p-thesis-p" class="tab-pane">
-      <table class="tt">
-        <thead><tr><th>種別</th><th>内容</th><th>期限</th><th>残り</th><th>ステータス</th><th>次回</th><th>次のアクション</th><th>メモ</th></tr></thead>
-        <tbody>
-          <tr><td><span class="tag">先行研究</span></td><td>先輩の論文 通読</td><td>—</td><td>—</td><td><span class="st st-doing">進行中</span></td><td>継続</td><td class="atext">継続中</td><td class="mtext"></td></tr>
-          <tr><td><span class="tag">質問</span></td><td>資生堂への質問</td><td>—</td><td>—</td><td><span class="st st-wait">返信待ち</span></td><td>—</td><td class="atext">IR・シンガポール質問送付済</td><td class="mtext">返信来なそう / 期限なし</td></tr>
-          <tr>
-            <td><span class="tag">開拓</span></td><td class="td-name">ジャカルタ インタビュー対象者 確認</td>
-            <td>—</td><td>—</td>
-            <td><span class="st st-doing">進行中</span></td><td>—</td>
-            <td class="atext">インタビュー対象者を紹介してもらっている / 返信待ち</td>
-            <td class="mtext">ジャカルタ経由で開拓中</td>
-          </tr>
-          <tr>
-            <td><span class="tag">フィールド</span></td><td class="td-name">浅草 ハラルお土産屋さん 訪問</td>
-            <td class="dl-far">未定</td><td class="dl-far">—</td>
-            <td><span class="st st-todo">未着手</span></td><td>—</td>
-            <td class="atext">実地調査 / 日程未定</td>
-            <td class="mtext">ビジネスプラン リサーチ</td>
-          </tr>
-          <tr>
-            <td><span class="tag">インタビュー</span></td><td class="td-name">追加インタビュー候補探し</td>
-            <td>—</td><td>—</td>
-            <td><span class="st st-doing">進行中</span></td><td>—</td>
-            <td class="atext">Nafesa・Zunita完了済 / 次の候補を開拓中</td>
-            <td class="mtext">ジャカルタ経由含む</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- ゼミ国内旅行 -->
-    <div id="p-zp" class="tab-pane">
-      <table class="tt">
-        <thead><tr><th>種別</th><th>タスク名</th><th>締切</th><th>残り</th><th>ステータス</th><th>次回</th><th>次のアクション</th><th>メモ</th></tr></thead>
-        <tbody>
+          <tr><td><span class="tag">マイル</span></td><td>論文PPT完成（長谷川先生向け）</td><td class="dl-warn">10/30</td><td class="dl-warn">あと29日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">10月に向けて調査開始</td><td class="mtext"></td></tr>
+          <tr style="background:#fff5f5"><td><span class="tag">マイル</span></td><td><strong>論文1次完成（50〜60%）</strong></td><td class="dl-warn">11/27</td><td class="dl-warn">あと57日</td><td><span class="st st-must">超マスト</span></td><td>—</td><td class="atext">11月に集中執筆</td><td class="mtext">最重要マイル</td></tr>
+          <tr><td><span class="tag">マイル</span></td><td>論文2次完成・提出</td><td class="dl-far">12/18</td><td class="dl-far">あと78日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">12月上旬に最終仕上げ</td><td class="mtext">ここで完成！</td></tr>
+          <tr><td><span class="tag">提出</span></td><td>論文提出（ゼミ締切）</td><td class="dl-far">2027/1/8</td><td class="dl-far">あと99日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">12/18完成後に提出</td><td class="mtext">正式締切1/9</td></tr>
+          <tr><td><span class="tag">審査</span></td><td>公開審査会</td><td class="dl-far">2027/1/24</td><td class="dl-far">あと115日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">発表準備</td><td class="mtext"></td></tr>
         </tbody>
       </table>
     </div>
@@ -344,20 +294,14 @@
       <table class="tt">
         <thead><tr><th>種別</th><th>内容</th><th>日付</th><th>残り</th><th>ステータス</th><th>次のアクション</th><th>備考</th></tr></thead>
         <tbody>
-          <tr class="row-done"><td><span class="tag">合宿</span></td><td>セミナーハウス 支払依頼（前原さん）</td><td>7/18</td><td><span class="st st-done">完了</span></td><td><span class="st st-done">完了</span></td><td class="atext">7/18完了</td><td class="mtext">軽井沢セミナーハウス</td></tr>
-          <tr class="row-done"><td><span class="tag">合宿</span></td><td>セミナーハウス 参加簿送付（事務局）</td><td>7/18</td><td><span class="st st-done">完了</span></td><td><span class="st st-done">完了</span></td><td class="atext">7/18完了</td><td class="mtext">軽井沢セミナーハウス</td></tr>
-          <tr class="row-done"><td><span class="tag">合宿</span></td><td>前川さんに支払情報を伝える</td><td>7/20</td><td><span class="st st-done">完了</span></td><td><span class="st st-done">完了</span></td><td class="atext">7/20完了</td><td class="mtext">軽井沢セミナーハウス</td></tr>
-          <tr><td><span class="tag">講演</span></td><td>zoom: 本間さん講演</td><td class="dl-ok">6/27</td><td class="dl-ok">あと22日</td><td><span class="st st-todo">未着手</span></td><td class="atext">zoom参加</td><td class="mtext">土 9:40-11:40 任意</td></tr>
-          <tr><td><span class="tag">ゼミ</span></td><td>合同ゼミ（オイシックス GS）</td><td class="dl-far">7/17</td><td class="dl-far">あと42日</td><td><span class="st st-todo">未着手</span></td><td class="atext">20:30〜</td><td class="mtext">7/17(金)</td></tr>
-          <tr><td><span class="tag">講演</span></td><td>zoom: リクルート元常務 北村さん</td><td class="dl-far">7/25</td><td class="dl-far">あと50日</td><td><span class="st st-todo">未着手</span></td><td class="atext">日程確定後</td><td class="mtext">任意</td></tr>
-          <tr><td><span class="tag">合宿</span></td><td>論文合宿</td><td class="dl-far">8/22</td><td class="dl-far">あと78日</td><td><span class="st st-todo">未着手</span></td><td class="atext">準備物確認</td><td class="mtext">8/22-23 軽井沢</td></tr>
-          <tr><td><span class="tag">視察</span></td><td>海外視察（韓国）</td><td class="dl-far">9/20</td><td class="dl-far">あと77日</td><td><span class="st st-todo">未着手</span></td><td class="atext">ゼミ参加</td><td class="mtext">9/20-23</td></tr>
-          <tr><td><span class="tag">ゼミ</span></td><td>ゼミ（秋Q開始）</td><td class="dl-far">10/2</td><td class="dl-far">あと119日</td><td><span class="st st-todo">未着手</span></td><td class="atext">ゼミ出席 18:00〜</td><td class="mtext"></td></tr>
-          <tr><td><span class="tag">学会</span></td><td>ファミリービジネス学会</td><td class="dl-far">11/7</td><td class="dl-far">あと155日</td><td><span class="st st-todo">未着手</span></td><td class="atext">参加登録確認</td><td class="mtext">@慶応大学</td></tr>
-          <tr><td><span class="tag">学会</span></td><td>ベンチャー学会</td><td class="dl-far">11/14</td><td class="dl-far">あと162日</td><td><span class="st st-todo">未着手</span></td><td class="atext">参加登録確認</td><td class="mtext">@京都大学</td></tr>
-          <tr><td><span class="tag">視察</span></td><td>海外視察研修</td><td class="dl-far">2027/2/20</td><td class="dl-far">あと260日</td><td><span class="st st-todo">未着手</span></td><td class="atext">詳細確認</td><td class="mtext">2/20-24</td></tr>
-          <tr><td><span class="tag">修了</span></td><td>PVC（OB会）</td><td class="dl-far">2027/3/20</td><td class="dl-far">あと288日</td><td><span class="st st-todo">未着手</span></td><td></td><td></td></tr>
-          <tr><td><span class="tag">修了</span></td><td>修了式</td><td class="dl-far">2027/3/25</td><td class="dl-far">あと293日</td><td><span class="st st-todo">未着手</span></td><td></td><td></td></tr>
+          <tr><td><span class="tag">ゼミ</span></td><td>合同ゼミ（田村ゼミと合同）</td><td class="dl-ok">10/2</td><td class="dl-ok">あと1日</td><td><span class="st st-todo">未着手</span></td><td class="atext">ゼミ出席</td><td class="mtext">10/2(木)</td></tr>
+          <tr><td><span class="tag">ゼミ</span></td><td>合同ゼミ（長内ゼミと合同・長内ゼミ発表）</td><td class="dl-ok">10/9</td><td class="dl-ok">あと8日</td><td><span class="st st-todo">未着手</span></td><td class="atext">ゼミ出席</td><td class="mtext">10/9(木)</td></tr>
+          <tr><td><span class="tag">ゼミ</span></td><td>合同ゼミ（長内ゼミと合同・長谷川ゼミ発表）</td><td class="dl-ok">10/16</td><td class="dl-ok">あと15日</td><td><span class="st st-todo">未着手</span></td><td class="atext">発表準備</td><td class="mtext">10/16(木)</td></tr>
+          <tr><td><span class="tag">学会</span></td><td>ファミリービジネス学会</td><td class="dl-far">11/7</td><td class="dl-far">あと37日</td><td><span class="st st-todo">未着手</span></td><td class="atext">参加登録確認</td><td class="mtext">@慶応大学</td></tr>
+          <tr><td><span class="tag">学会</span></td><td>ベンチャー学会</td><td class="dl-far">11/14</td><td class="dl-far">あと44日</td><td><span class="st st-todo">未着手</span></td><td class="atext">参加登録確認</td><td class="mtext">@京都大学</td></tr>
+          <tr><td><span class="tag">視察</span></td><td>海外視察研修</td><td class="dl-far">2027/2/20</td><td class="dl-far">あと142日</td><td><span class="st st-todo">未着手</span></td><td class="atext">詳細確認</td><td class="mtext">2/20-24</td></tr>
+          <tr><td><span class="tag">修了</span></td><td>PVC（OB会）</td><td class="dl-far">2027/3/20</td><td class="dl-far">あと170日</td><td><span class="st st-todo">未着手</span></td><td></td><td></td></tr>
+          <tr><td><span class="tag">修了</span></td><td>修了式</td><td class="dl-far">2027/3/25</td><td class="dl-far">あと175日</td><td><span class="st st-todo">未着手</span></td><td></td><td></td></tr>
         </tbody>
       </table>
     </div>
@@ -379,8 +323,8 @@
           <tr class="row-done"><td><span class="tag">エントリー</span></td><td>エントリー受付開始</td><td>6/1</td><td>—</td><td><span class="st st-done">完了</span></td><td class="atext">エントリー済み</td><td class="mtext">6/1(月) 19:00〜</td></tr>
           <tr class="row-done"><td><span class="tag">エントリー</span></td><td>エントリー締切</td><td>7/24</td><td>—</td><td><span class="st st-done">完了</span></td><td class="atext">締切通過</td><td class="mtext">7/24(金) 23:59</td></tr>
           <tr class="row-done"><td><span class="tag">予選</span></td><td>予選開始・ケース発表</td><td>7/25</td><td>—</td><td><span class="st st-done">完了</span></td><td class="atext">ケース確認済み</td><td class="mtext">7/25(土)</td></tr>
-          <tr><td><span class="tag">予選</span></td><td>予選資料提出締切</td><td class="dl-warn">9/5</td><td class="dl-warn">あと41日</td><td><span class="st st-todo">未着手</span></td><td class="atext">ケース分析・資料作成</td><td class="mtext">9/5(土) 23:59</td></tr>
-          <tr><td><span class="tag">本選</span></td><td>本選出場者発表</td><td class="dl-far">10/3</td><td class="dl-far">あと69日</td><td><span class="st st-todo">未着手</span></td><td class="atext">結果待ち</td><td class="mtext">10/3(土)</td></tr>
+          <tr class="row-done"><td><span class="tag">予選</span></td><td>予選資料提出締切</td><td>9/5</td><td>—</td><td><span class="st st-done">完了</span></td><td class="atext">提出済み</td><td class="mtext">9/5(土) 23:59</td></tr>
+          <tr><td><span class="tag">本選</span></td><td>本選出場者発表</td><td class="dl-ok">10/3</td><td class="dl-ok">あと2日</td><td><span class="st st-todo">未着手</span></td><td class="atext">結果待ち</td><td class="mtext">10/3(土)</td></tr>
           <tr><td><span class="tag">本選</span></td><td>本選資料提出</td><td class="dl-far">11/8</td><td class="dl-far">あと105日</td><td><span class="st st-todo">未着手</span></td><td class="atext">本選進出時</td><td class="mtext">11/8(日)</td></tr>
           <tr><td><span class="tag">本選</span></td><td>本選（準決勝+決勝）</td><td class="dl-far">11/15</td><td class="dl-far">あと112日</td><td><span class="st st-todo">未着手</span></td><td class="atext">本選進出時</td><td class="mtext">11/15(日)</td></tr>
         </tbody>
@@ -392,8 +336,83 @@
       <table class="tt">
         <thead><tr><th>カテゴリ</th><th>タスク名</th><th>期限</th><th>残り</th><th>ステータス</th><th>次回</th><th>次のアクション</th><th>メモ</th></tr></thead>
         <tbody>
-          <tr><td><span class="tag">韓国研修</span></td><td>航空券・ホテル予約（妻と相談）</td><td class="dl-ok">—</td><td class="dl-ok">今日中</td><td><span class="st st-todo">未着手</span></td><td>帰宅後</td><td class="atext">帰国日決定（9/23 or 24 or 25）→ 航空券 → ホテル</td><td class="mtext">9/20出発 / 妻と相談して決める</td></tr>
-          <tr><td><span class="tag">投資</span></td><td>株取引 毎日チェック</td><td>—</td><td>—</td><td><span class="st st-ongoing">継続中</span></td><td>毎日</td><td class="atext">本日確認</td><td class="mtext">報告ベース</td></tr>
+          <tr><td><span class="tag">手続き</span></td><td>職業訓練支援金の証明書入手</td><td class="dl-fire">10/2</td><td class="dl-fire">あと1日</td><td><span class="st st-todo">未着手</span></td><td>10/2</td><td class="atext">10/2 11:00〜</td><td class="mtext"></td></tr>
+          <tr><td><span class="tag">手続き</span></td><td>職業訓練支援金の申請</td><td class="dl-warn">10/6</td><td class="dl-warn">あと5日</td><td><span class="st st-todo">未着手</span></td><td>10/6</td><td class="atext">10/6 13:30〜 池袋ハローワーク</td><td class="mtext"></td></tr>
+          <tr><td><span class="tag">手続き</span></td><td>開業届提出</td><td class="dl-far">10/31</td><td class="dl-far">あと30日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">10月中に提出</td><td class="mtext"></td></tr>
+          <tr><td><span class="tag">手続き</span></td><td>育児給付金延長申請の準備</td><td class="dl-far">11/30</td><td class="dl-far">あと60日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">11月中に準備</td><td class="mtext"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 英単語STOCK -->
+    <div id="p-vocab" class="tab-pane">
+      <table class="tt">
+        <thead><tr><th>日付</th><th>単語・表現</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td>7/28</td><td class="td-name">lull</td><td class="atext">（一時的な）静けさ・小康状態。動きが激しい状況の合間の束の間の落ち着き。例文: "by Monday the unofficial lull was still holding"（月曜になっても非公式な小康状態が続いていた）</td></tr>
+          <tr><td>7/28</td><td class="td-name">truce</td><td class="atext">停戦、休戦（名詞）。"a fragile truce"＝脆弱な停戦</td></tr>
+          <tr><td>7/28</td><td class="td-name">hostilities</td><td class="atext">交戦、戦闘行為（複数形で使うことが多い）。"months of hostilities"＝数ヶ月にわたる交戦</td></tr>
+          <tr><td>7/28</td><td class="td-name">transit (v.)</td><td class="atext">通過する、通行する（動詞）。"transit the Strait of Hormuz"＝ホルムズ海峡を通過する</td></tr>
+          <tr><td>7/28</td><td class="td-name">come apart</td><td class="atext">崩れる、破綻する、バラバラになる（句動詞）。合意・関係・停戦などが崩壊する意味でも使う。"the truce came apart"＝停戦が崩れた</td></tr>
+          <tr><td>7/28</td><td class="td-name">behind + sits</td><td class="atext">前置詞句を文頭に置いた倒置文。"Behind the diplomatic explanation sits a more awkward one."＝通常は「A sits behind B」だが、前置詞句を先に出すと「外交的説明の背後に、さらに厄介な説明がある」という意味。</td></tr>
+          <tr><td>7/28</td><td class="td-name">deplete</td><td class="atext">枯渇させる、減少させる（動詞）。"stockpiles are depleted"＝備蓄が枯渇している・在庫が尽きている</td></tr>
+          <tr><td>7/28</td><td class="td-name">unforgiving</td><td class="atext">容赦ない、厳しい、許さない（形容詞）。"The arithmetic of modern air war is unforgiving"＝現代の空戦では計算上わずかなミスも許されない・損失計算が厳しい</td></tr>
+          <tr><td>7/28</td><td class="td-name">run low on</td><td class="atext">～が不足しかけている、～が少なくなっている（句動詞）。"running low on bombs"＝爆弾の在庫が減少しかけている・爆弾が足りなくなりつつある</td></tr>
+          <tr><td>7/28</td><td class="td-name">run through</td><td class="atext">～を貫く、～を通る、～に関わっている（句動詞）。"The economic stakes run through a single stretch of water"＝経済的利害がその海峡に集中している・その海峡が経済的に重要な役割を果たしている</td></tr>
+          <tr><td>7/28</td><td class="td-name">implausible</td><td class="atext">もっともらしくない、信じがたい、説得力のない（形容詞）。"plausible"の否定形。例："That explanation is implausible."＝その説明は信じがたい</td></tr>
+          <tr><td>7/28</td><td class="td-name">blaze</td><td class="atext">炎、火、激しい光（名詞）。または燃える、輝く、激しく進む（動詞）。"A blaze of fire"＝激しく燃える炎。"blaze a trail"＝道を切り開く・先駆けになる</td></tr>
+          <tr><td>7/28</td><td class="td-name">scrubland</td><td class="atext">灌木地帯、低木林（名詞）。背の低い灌木や低木が密集している地域。"dry scrubland"＝乾燥した低木地帯</td></tr>
+          <tr><td>7/28</td><td class="td-name">outskirts</td><td class="atext">郊外、周辺部、外縁（名詞・複数形で使うことが多い）。都市や地域の端っこ。"on the outskirts of the city"＝都市の郊外で</td></tr>
+          <tr><td>7/28</td><td class="td-name">holiday accommodation</td><td class="atext">休暇用の宿泊施設、休暇中の泊まる場所。accommodation は「宿泊施設」（正しいスペル：cが2つ）。"Book holiday accommodation in advance"＝休暇用の宿泊施設を事前に予約する</td></tr>
+          <tr><td>7/28</td><td class="td-name">unnerve</td><td class="atext">不安にさせる、動揺させる（動詞）。"unnerved"は形容詞・過去分詞形。"What has unnerved veteran firefighters"＝ベテラン消防士たちを不安にさせたもの</td></tr>
+          <tr><td>7/28</td><td class="td-name">capricious</td><td class="atext">気まぐれな、変わりやすい、予測不能な、気ままな（形容詞）。"capricious behavior"＝気まぐれな行動・予測できない動き</td></tr>
+          <tr><td>7/28</td><td class="td-name">resort to</td><td class="atext">～に頼る、～に訴える（句動詞）。"resort to violence"＝暴力に訴える。"Crews resorted to earth movers"＝消防隊は建設機械に頼った</td></tr>
+          <tr><td>7/28</td><td class="td-name">earth movers</td><td class="atext">ショベルカーなどの建設機械、土を動かす重機（名詞）</td></tr>
+          <tr><td>7/28</td><td class="td-name">starve ... of</td><td class="atext">～から～を奪う、～を～から不足させる（句動詞）。"starve the flames of fuel"＝炎に燃料を与えない・火が燃料を得られないようにする</td></tr>
+          <tr><td>7/28</td><td class="td-name">footprint</td><td class="atext">足跡。また（建物などの）占有面積・建築面積。さらに（企業などの）事業展開範囲・影響範囲。"carbon footprint"＝カーボンフットプリント・環境への影響</td></tr>
+          <tr><td>7/28</td><td class="td-name">in a race against time</td><td class="atext">時間との競争をしている、時間がない状況で急いでいる（イディオム）。例："The doctors are in a race against time to save the patient's life."＝医者たちは患者の命を救うために時間との闘いをしている</td></tr>
+          <tr><td>7/28</td><td class="td-name">smoldering</td><td class="atext">くすぶる、燻る、ゆっくり燃える（形容詞・現在分詞）。"smoldering vegetation"＝くすぶる植生・燻る草木</td></tr>
+          <tr><td>7/28</td><td class="td-name">perimeter</td><td class="atext">周囲、周辺、外周（名詞）。"a vast perimeter"＝広大な周辺地域・広大な周囲。火災の範囲を表現する時に使われる</td></tr>
+          <tr><td>7/28</td><td class="td-name">sharpen</td><td class="atext">刃物などを研ぐ（物理的）。または（議論・焦点などを）より明確・鮮明にする、先鋭化させる（比喩的）。"the fires have sharpened Europe's climate argument"＝火災がヨーロッパの気候議論をより先鋭化させた</td></tr>
+          <tr><td>7/28</td><td class="td-name">depopulation</td><td class="atext">人口減少、過疎化（名詞）。"rural depopulation"＝農村部の過疎化</td></tr>
+          <tr><td>7/28</td><td class="td-name">undergrowth</td><td class="atext">下生え、林床の低い植生（灌木や草）（名詞）。unmanaged undergrowth＝管理されていない下生え</td></tr>
+          <tr><td>7/28</td><td class="td-name">primed to</td><td class="atext">～する準備ができている、～しやすい状態（表現）。"primed to burn"＝焼けやすい状態になっている・燃えやすく準備されている</td></tr>
+          <tr><td>7/28</td><td class="td-name">designed for</td><td class="atext">～用に設計される（表現）。"emergency services designed for a milder climate"＝より温和な気候用に設計された緊急サービス</td></tr>
+          <tr><td>7/28</td><td class="td-name">be asked to cope with</td><td class="atext">～に対処するよう求められる、対応を迫られる（句動詞）。"is being asked to cope with a harsher climate"＝より厳しい気候に対処するよう求められている</td></tr>
+          <tr><td>7/28</td><td class="td-name">continent</td><td class="atext">大陸（名詞）。この文脈では「ヨーロッパ大陸」という意味</td></tr>
+          <tr><td>7/28</td><td class="td-name">breakthrough</td><td class="atext">突破口、大きな前進（名詞）。"a breakthrough towards peace"＝平和への突破口</td></tr>
+          <tr><td>7/28</td><td class="td-name">descend into</td><td class="atext">～に陥る、～へと急速に悪化する（句動詞）。"descended into tit-for-tat military action"＝同等報復的な軍事行動に陥った</td></tr>
+          <tr><td>7/28</td><td class="td-name">tit-for-tat</td><td class="atext">同等報復、やられたらやり返すという方式（名詞・形容詞）。"tit-for-tat military action"＝同等報復的な軍事行動</td></tr>
+          <tr><td>7/28</td><td class="td-name">red lines</td><td class="atext">譲ることできない限界、越えてはいけない一線（名詞）。"crossing red lines"＝一線を越える</td></tr>
+          <tr><td>7/28</td><td class="td-name">untouchable</td><td class="atext">触れられない、聖域とされている（形容詞）。"untouchable red lines"＝聖域とされていた一線</td></tr>
+          <tr><td>7/28</td><td class="td-name">prevail</td><td class="atext">優勢である、勝つ、勝利を収める（動詞）。また（慣習・傾向などが）一般的である。"Justice will prevail."＝正義が勝つ</td></tr>
+          <tr><td>7/29</td><td class="td-name">accord</td><td class="atext">協定、合意、協約（名詞）。また一致、調和。"the fragile accord"＝脆い協定。"in accord with"＝～と一致して・～に沿って</td></tr>
+          <tr><td>7/29</td><td class="td-name">From that point forward</td><td class="atext">その時点から以降、あの出来事から後は、それ以来（表現）。時間的な区切りを示す。例："From that point forward, everything changed."＝その時点から先は、すべてが変わった</td></tr>
+          <tr><td>7/29</td><td class="td-name">restraint</td><td class="atext">抑制、自制、節度（名詞）。"military restraint"＝軍事的な自制</td></tr>
+          <tr><td>7/29</td><td class="td-name">begat</td><td class="atext">begetの過去形。～を生じさせる、～を引き起こす（動詞）。"U.S. strikes begat Iranian counterattacks"＝米国の攻撃がイランの反撃を招いた</td></tr>
+          <tr><td>7/29</td><td class="td-name">abating</td><td class="atext">減少する、弱まる、衰える（abateの現在分詞）。"shows no signs of abating"＝衰える兆候がない</td></tr>
+          <tr><td>7/29</td><td class="td-name">retaliation</td><td class="atext">報復、仕返し、復讐（名詞）。"a cycle of retaliation"＝報復の循環・報復の繰り返し。"in retaliation for"＝～への報復として</td></tr>
+          <tr><td>7/29</td><td class="td-name">proxy</td><td class="atext">代理人、代理者（名詞）。また代わりになるもの。"proxy war"＝代理戦争。"by proxy"＝代理で・代わりに</td></tr>
+          <tr><td>7/29</td><td class="td-name">absorb the shock</td><td class="atext">衝撃を吸収する、打撃を受け止める（表現）。"absorb the initial shock"＝最初の打撃を受け止める</td></tr>
+          <tr><td>7/29</td><td class="td-name">at arm's length</td><td class="atext">腕の長さだけ離して＝距離を置いて、遠ざけて（イディオム）。"keeping at arm's length"＝距離を置いて保つ・避ける</td></tr>
+          <tr><td>7/29</td><td class="td-name">buffer</td><td class="atext">緩衝材、緩和する役割（名詞）。"this buffer has grown increasingly thin"＝この緩和役がますます薄くなっている</td></tr>
+          <tr><td>7/29</td><td class="td-name">grown increasingly thin</td><td class="atext">ますます薄くなる＝ますます危機的になる、ますます危ない状態になる（表現）</td></tr>
+          <tr><td>7/29</td><td class="td-name">deter</td><td class="atext">阻止する、抑止する、思いとどまらせる（動詞）。"deter aggression"＝侵略を抑止する。"nuclear deterrent"＝核抑止力</td></tr>
+          <tr><td>7/29</td><td class="td-name">allegiance</td><td class="atext">忠誠、義務、主君への忠節（名詞）。複数形 allegiances。"pledge allegiance"＝忠誠を誓う。"regional allegiances"＝地域的な忠誠・勢力</td></tr>
+          <tr><td>7/29</td><td class="td-name">position themselves</td><td class="atext">自分たちを位置付ける、立場を明確にする、ポジションを取る（表現）。"position themselves according to"＝～に応じて立場を変える・～に基づいて行動する</td></tr>
+          <tr><td>7/29</td><td class="td-name">adversary</td><td class="atext">敵、対手、対敵（名詞）。複数形 adversaries。"geopolitical adversaries"＝地政学的な対立国。"longtime adversaries"＝長年の敵</td></tr>
+          <tr><td>7/29</td><td class="td-name">caught between</td><td class="atext">～の間に挟まれている、どちらの側にもつけない困難な状況にある（表現）。"caught geographically between the two powers"＝二大国の間に地理的に挟まれている</td></tr>
+          <tr><td>7/29</td><td class="td-name">face constraints</td><td class="atext">制約に直面する、制限を受ける（表現）。"face severe constraints"＝厳しい制約に直面する</td></tr>
+          <tr><td>7/29</td><td class="td-name">on their soil</td><td class="atext">自分たちの領土で、自国領内で（表現）。"operations on their soil"＝自国領内での作戦・軍事行動</td></tr>
+          <tr><td>7/29</td><td class="td-name">peripheral</td><td class="atext">周辺の、端の、付随的な、二次的な（形容詞・名詞）。"peripheral players"＝周辺的なプレイヤー・二次的な役者。"peripheral region"＝周辺地域</td></tr>
+          <tr><td>7/29</td><td class="td-name">persist</td><td class="atext">継続する、続く、存続する（動詞）。また、しつこく～し続ける、執拗に続ける。"The problem persists"＝その問題は続いている。"persist in doing"＝～し続ける</td></tr>
+          <tr><td>7/29</td><td class="td-name">drown out</td><td class="atext">～の音をかき消す、～をかき消す（句動詞）。"drowned out by noise"＝音によってかき消される。"their voices were drowned out"＝彼らの声はかき消された</td></tr>
+          <tr><td>7/29</td><td class="td-name">precarious</td><td class="atext">危険な、不安定な、危ぶまれた（形容詞）。"particularly precarious"＝特に危険な・特に不安定な</td></tr>
+          <tr><td>7/29</td><td class="td-name">viable</td><td class="atext">実行可能な、生存可能な（形容詞）。"viable solutions"＝実行可能な解決策。"no viable options"＝実行可能な選択肢がない</td></tr>
+          <tr><td>7/29</td><td class="td-name">off-ramps</td><td class="atext">脱出口、～から抜ける道（高速道路の出口の比喩）。"diplomatic off-ramps"＝外交的な脱出口・解決策への道</td></tr>
+          <tr><td>7/29</td><td class="td-name">promising</td><td class="atext">有望な、有望そうな、期待できる（形容詞）。"a promising start"＝有望なスタート。"promising negotiations"＝有望な交渉</td></tr>
+          <tr><td>7/29</td><td class="td-name">hurtle</td><td class="atext">勢いよく進む、急速に移動する、投げつける（動詞）。"hurtling towards"＝～に向かって急速に進む。"countries hurtling towards conflict"＝紛争に向かって急速に進む国々</td></tr>
+          <tr><td>7/29</td><td class="td-name">in earnest</td><td class="atext">真剣に、本気で、真摯に、本当の意味で（表現）。"once it begins in earnest"＝それが本格的に始まったら・本気で始まったら。"take something in earnest"＝～を真剣に受け止める</td></tr>
         </tbody>
       </table>
     </div>
@@ -494,6 +513,10 @@
           <tr class="row-done"><td><span class="tag">人材・組織</span></td><td>GDコメント提出 第1回</td><td>6/4</td><td><span class="st st-done">完了</span></td><td class="mtext">6/4授業分 提出済み</td></tr>
           <tr class="row-done"><td><span class="tag">CF</span></td><td>テスト本番</td><td>6/3</td><td><span class="st st-done">完了</span></td><td class="mtext">6/3受験完了 / 単位取得見込み</td></tr>
           <tr class="row-done"><td><span class="tag">事業再生</span></td><td>予習（夏Q 第1回）</td><td>6/4</td><td><span class="st st-done">完了</span></td><td class="mtext">6/4朝完了 / 土1-2限 11-904</td></tr>
+          <tr class="row-done"><td><span class="tag">ゼミ</span></td><td>最終確定メンバを長谷川さんに連絡</td><td>8/8</td><td><span class="st st-done">完了</span></td><td class="mtext">8/8完了</td></tr>
+          <tr class="row-done"><td><span class="tag">韓国研修</span></td><td>航空券・ホテル予約</td><td>7/29</td><td><span class="st st-done">完了</span></td><td class="mtext">7/29完了 / 9/20-25 チェジュ航空 / BW江南→Dormy Inn江南→ナインツリー東大門</td></tr>
+          <tr class="row-done"><td><span class="tag">論文</span></td><td>Nafesaインタビュー資料・質問票作成</td><td>7/29</td><td><span class="st st-done">完了</span></td><td class="mtext">7/29完了 / 7/30 2nd Round用</td></tr>
+          <tr class="row-done"><td><span class="tag">私生活</span></td><td>都内滞在時のホテルを両親に伝える</td><td>7/29</td><td><span class="st st-done">完了</span></td><td class="mtext">7/29完了</td></tr>
           <tr class="row-done"><td><span class="tag">人材組織</span></td><td>予習（夏Q 第1回）</td><td>6/3</td><td><span class="st st-done">完了</span></td><td class="mtext">6/3完了 / 木1-2限 11-903</td></tr>
           <tr class="row-done"><td><span class="tag">ファイナンス</span></td><td>予習（夏Q 第1回）</td><td>6/3</td><td><span class="st st-done">完了</span></td><td class="mtext">6/3完了</td></tr>
           <tr class="row-done"><td><span class="tag">ビジネス統計</span></td><td>大課題（タームペーパー）提出</td><td>6/2</td><td><span class="st st-done">完了</span></td><td class="mtext">6/2提出完了</td></tr>
@@ -646,20 +669,6 @@ function sw(id, btn) {
     }
   });
 })();
-</script>
-</div><!-- /main-content -->
-<script>
-async function unlock(){
-  const pw=document.getElementById('pw').value;
-  const buf=new TextEncoder().encode(pw);
-  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buf))).map(b=>b.toString(16).padStart(2,'0')).join('');
-  if(hash==='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b'){
-    document.getElementById('lock-screen').style.display='none';
-    document.getElementById('main-content').style.display='';
-    document.body.classList.remove('locked');
-  }else{document.getElementById('pw-err').style.display='block';}
-}
-document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')unlock();});
 </script>
 </body>
 </html>
