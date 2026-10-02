@@ -646,9 +646,9 @@ function sw(id, btn) {
 
   // クォーター進捗更新
   const quarters = [
-    { start: new Date(2026,3,13), end: new Date(2026,5,3), idx: 0 },  // 春Q 4/13-6/3
-    { start: new Date(2026,5,4), end: new Date(2026,6,22), idx: 1 },  // 夏Q 6/4-7/22
-    { start: new Date(2026,3,13), end: new Date(2026,6,25), idx: 2 }  // 春学期 4/13-7/25
+    { start: new Date(2026,9,1), end: new Date(2026,10,21), idx: 0 },  // 秋Q 10/1-11/21
+    { start: new Date(2026,10,23), end: new Date(2027,0,26), idx: 1 },  // 冬Q 11/23-1/26
+    { start: new Date(2026,9,1), end: new Date(2027,0,26), idx: 2 }  // 秋学期 10/1-1/26
   ];
   document.querySelectorAll('.qcard').forEach((card, i) => {
     if (!quarters[i]) return;
