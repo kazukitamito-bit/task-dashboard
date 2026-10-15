@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
 (function(){
   var h='6ae3ba0713eb6618ea97ae71de8d6ba5e63e3d1cc503babb20743b6c7ef96e8b';
@@ -12,11 +13,10 @@
   crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)).then(function(buf){
     var a=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
     if(a===h){sessionStorage.setItem('dk',h);}
-    else{document.documentElement.innerHTML='<body style=\"text-align:center;padding:60px;font-family:sans-serif\"><h2>パスワードが違います</h2><p>ページを再読み込みしてください</p></body>';}
+    else{document.documentElement.innerHTML='<body style="text-align:center;padding:60px;font-family:sans-serif"><h2>パスワードが違います</h2><p>ページを再読み込みしてください</p></body>';}
   });
 })();
 </script>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>タスク管理ダッシュボード</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -256,12 +256,12 @@
     <div class="tabs-nav">
       <button class="tb on"  onclick="sw('study',this)">&#128218; 勉強 <span class="cnt">5</span></button>
       <button class="tb"     onclick="sw('thesis',this)">&#128221; 論文 <span class="cnt">6</span></button>
-      <button class="tb"     onclick="sw('za',this)">&#127979; ゼミ（全体）<span class="cnt">9</span></button>
+      <button class="tb"     onclick="sw('za',this)">&#127979; ゼミ（全体）<span class="cnt">18</span></button>
       <button class="tb"     onclick="sw('misc',this)">&#128203; その他庶務 <span class="cnt">1</span></button>
       <button class="tb"     onclick="sw('jbcc',this)">&#127942; JBCC <span class="cnt">2</span></button>
       <button class="tb"     onclick="sw('life',this)">&#127968; 私生活 <span class="cnt">3</span></button>
       <button class="tb"     onclick="sw('vocab',this)">&#128218; 英単語STOCK <span class="cnt">65</span></button>
-      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">95</span></button>
+      <button class="tb"     onclick="sw('done',this)">&#9989; 完了済み <span class="cnt">97</span></button>
     </div>
 
     <!-- 勉強 -->
@@ -285,10 +285,10 @@
         <tbody>
           <tr><td><span class="tag">日常</span></td><td>論文ルーティン（毎朝30min）</td><td class="dl-far">—</td><td>—</td><td><span class="st st-ongoing">継続中</span></td><td>毎朝</td><td class="atext">CiNii/Web of Science検索</td><td class="mtext"></td></tr>
           <tr class="row-done"><td><span class="tag">マイル</span></td><td>論文計画書 提出</td><td>7/22</td><td>—</td><td><span class="st st-done">完了</span></td><td>7/22</td><td class="atext">提出完了</td><td class="mtext">7/22 提出完了</td></tr>
-          <tr><td><span class="tag">マイル</span></td><td>論文PPT完成・提出（全内容カバー）</td><td class="dl-warn">10/31</td><td class="dl-warn">あと20日</td><td><span class="st st-doing">進行中</span></td><td>—</td><td class="atext">修論全体のPPTを完成させる</td><td class="mtext">10月末締切</td></tr>
+          <tr><td><span class="tag">マイル</span></td><td>論文PPT完成・提出（全内容カバー）</td><td class="dl-warn" data-deadline="2026-10-30">10/30</td><td class="dl-warn">あと15日</td><td><span class="st st-doing">進行中</span></td><td>—</td><td class="atext">修論全体のPPTを完成→10/30ゼミで発表</td><td class="mtext">10/30ゼミ発表</td></tr>
           <tr style="background:#fff5f5"><td><span class="tag">マイル</span></td><td><strong>論文1次完成（50〜60%）</strong></td><td class="dl-warn">11/27</td><td class="dl-warn">あと57日</td><td><span class="st st-must">超マスト</span></td><td>—</td><td class="atext">11月に集中執筆</td><td class="mtext">最重要マイル</td></tr>
           <tr><td><span class="tag">マイル</span></td><td>論文2次完成・提出</td><td class="dl-far">12/18</td><td class="dl-far">あと78日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">12月上旬に最終仕上げ</td><td class="mtext">ここで完成！</td></tr>
-          <tr><td><span class="tag">提出</span></td><td>論文提出（ゼミ締切）</td><td class="dl-far">2027/1/8</td><td class="dl-far">あと99日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">12/18完成後に提出</td><td class="mtext">正式締切1/9</td></tr>
+          <tr><td><span class="tag">提出</span></td><td>論文提出（ゼミ締切）</td><td class="dl-far" data-deadline="2027-01-09">2027/1/9</td><td class="dl-far">あと86日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">12/18完成後に提出</td><td class="mtext">1/9提出→20:00懇親会</td></tr>
           <tr><td><span class="tag">審査</span></td><td>公開審査会</td><td class="dl-far">2027/1/24</td><td class="dl-far">あと115日</td><td><span class="st st-todo">未着手</span></td><td>—</td><td class="atext">発表準備</td><td class="mtext"></td></tr>
         </tbody>
       </table>
@@ -299,15 +299,25 @@
       <table class="tt">
         <thead><tr><th>種別</th><th>内容</th><th>日付</th><th>残り</th><th>ステータス</th><th>次のアクション</th><th>備考</th></tr></thead>
         <tbody>
-          <tr><td><span class="tag">ゼミ</span></td><td>合同ゼミ（田村ゼミと合同）</td><td class="dl-ok">10/2</td><td class="dl-ok">あと1日</td><td><span class="st st-todo">未着手</span></td><td class="atext">ゼミ出席</td><td class="mtext">10/2(木)</td></tr>
-          <tr><td><span class="tag">ゼミ</span></td><td>合同ゼミ（長内ゼミと合同・長内ゼミ発表）</td><td class="dl-ok">10/9</td><td class="dl-ok">あと8日</td><td><span class="st st-todo">未着手</span></td><td class="atext">ゼミ出席</td><td class="mtext">10/9(木)</td></tr>
-          <tr class="row-done"><td><span class="tag">ゼミ</span></td><td>横断幕を先生に渡す</td><td>10/9</td><td>—</td><td><span class="st st-done">完了</span></td><td class="atext">完了</td><td class="mtext">10/9(木)</td></tr>
-          <tr><td><span class="tag">ゼミ</span></td><td>合同ゼミ（長内ゼミと合同・長谷川ゼミ発表）</td><td class="dl-ok">10/16</td><td class="dl-ok">あと15日</td><td><span class="st st-todo">未着手</span></td><td class="atext">発表準備</td><td class="mtext">10/16(木)</td></tr>
-          <tr><td><span class="tag">学会</span></td><td>ファミリービジネス学会</td><td class="dl-far">11/7</td><td class="dl-far">あと37日</td><td><span class="st st-todo">未着手</span></td><td class="atext">参加登録確認</td><td class="mtext">@慶応大学</td></tr>
-          <tr><td><span class="tag">学会</span></td><td>ベンチャー学会</td><td class="dl-far">11/14</td><td class="dl-far">あと44日</td><td><span class="st st-todo">未着手</span></td><td class="atext">参加登録確認</td><td class="mtext">@京都大学</td></tr>
-          <tr><td><span class="tag">視察</span></td><td>海外視察研修</td><td class="dl-far">2027/2/20</td><td class="dl-far">あと142日</td><td><span class="st st-todo">未着手</span></td><td class="atext">詳細確認</td><td class="mtext">2/20-24</td></tr>
-          <tr><td><span class="tag">修了</span></td><td>PVC（OB会）</td><td class="dl-far">2027/3/20</td><td class="dl-far">あと170日</td><td><span class="st st-todo">未着手</span></td><td></td><td></td></tr>
-          <tr><td><span class="tag">修了</span></td><td>修了式</td><td class="dl-far">2027/3/25</td><td class="dl-far">あと175日</td><td><span class="st st-todo">未着手</span></td><td></td><td></td></tr>
+          <tr><td><span class="tag">ゼミ</span></td><td>合同ゼミ（長谷川ゼミ発表）+ 飲み会</td><td class="dl-fire" data-deadline="2026-10-16">10/16</td><td class="dl-fire">あと1日</td><td><span class="st st-todo">未着手</span></td><td class="atext">発表準備</td><td class="mtext">金5限 17:00-19:00</td></tr>
+          <tr><td><span class="tag">ゼミ</span></td><td>女性シニアリーダーとの勉強会</td><td class="dl-warn" data-deadline="2026-10-23">10/23</td><td class="dl-warn">あと8日</td><td><span class="st st-todo">未着手</span></td><td class="atext">出席</td><td class="mtext">金 17:00-19:00</td></tr>
+          <tr><td><span class="tag">ゼミ</span></td><td>論文PP発表（ゼミにて）</td><td class="dl-warn" data-deadline="2026-10-30">10/30</td><td class="dl-warn">あと15日</td><td><span class="st st-todo">未着手</span></td><td class="atext">PPT完成→ゼミで発表</td><td class="mtext">金 17:00-19:00</td></tr>
+          <tr><td><span class="tag">相談</span></td><td>個別相談会（ZOOM）</td><td class="dl-far" data-deadline="2026-11-04">11/4</td><td class="dl-far">あと20日</td><td><span class="st st-todo">未着手</span></td><td class="atext">長谷川先生と相談</td><td class="mtext">水 16:00-18:30</td></tr>
+          <tr><td><span class="tag">相談</span></td><td>個別相談会（ZOOM）</td><td class="dl-far" data-deadline="2026-11-05">11/5</td><td class="dl-far">あと21日</td><td><span class="st st-todo">未着手</span></td><td class="atext">長谷川先生と相談</td><td class="mtext">木 17:00-22:00</td></tr>
+          <tr><td><span class="tag">学会</span></td><td>ファミリービジネス学会</td><td class="dl-far" data-deadline="2026-11-07">11/7</td><td class="dl-far">あと23日</td><td><span class="st st-todo">未着手</span></td><td class="atext">参加登録確認</td><td class="mtext">@慶応大学</td></tr>
+          <tr><td><span class="tag">発表</span></td><td>論文発表（ZOOM）</td><td class="dl-far" data-deadline="2026-11-13">11/13</td><td class="dl-far">あと29日</td><td><span class="st st-todo">未着手</span></td><td class="atext">発表準備</td><td class="mtext">金 17:00-19:00</td></tr>
+          <tr><td><span class="tag">学会</span></td><td>ベンチャー学会</td><td class="dl-far" data-deadline="2026-11-14">11/14</td><td class="dl-far">あと30日</td><td><span class="st st-todo">未着手</span></td><td class="atext">参加登録確認</td><td class="mtext">@京都大学 11/14-15</td></tr>
+          <tr><td><span class="tag">発表</span></td><td>論文発表</td><td class="dl-far" data-deadline="2026-11-20">11/20</td><td class="dl-far">あと36日</td><td><span class="st st-todo">未着手</span></td><td class="atext">発表準備</td><td class="mtext">金 17:00-19:00</td></tr>
+          <tr><td><span class="tag">相談</span></td><td>個別相談会</td><td class="dl-far" data-deadline="2026-11-21">11/21</td><td class="dl-far">あと37日</td><td><span class="st st-todo">未着手</span></td><td class="atext">長谷川先生と相談</td><td class="mtext">土 14:00-17:00</td></tr>
+          <tr><td><span class="tag">発表</span></td><td>論文1次完成・ゼミ（ZOOM）</td><td class="dl-far" data-deadline="2026-11-27">11/27</td><td class="dl-far">あと43日</td><td><span class="st st-todo">未着手</span></td><td class="atext">50-60%完成で発表</td><td class="mtext">金 17:00-19:00</td></tr>
+          <tr><td><span class="tag">発表</span></td><td>論文発表</td><td class="dl-far" data-deadline="2026-12-04">12/4</td><td class="dl-far">あと50日</td><td><span class="st st-todo">未着手</span></td><td class="atext">発表準備</td><td class="mtext">金 17:00-19:00</td></tr>
+          <tr><td><span class="tag">発表</span></td><td>論文発表</td><td class="dl-far" data-deadline="2026-12-11">12/11</td><td class="dl-far">あと57日</td><td><span class="st st-todo">未着手</span></td><td class="atext">発表準備</td><td class="mtext">金 17:00-19:00</td></tr>
+          <tr><td><span class="tag">祝</span></td><td>懇親会</td><td class="dl-far" data-deadline="2027-01-09">2027/1/9</td><td class="dl-far">あと86日</td><td><span class="st st-todo">未着手</span></td><td class="atext">論文提出後の打ち上げ</td><td class="mtext">20:00〜</td></tr>
+          <tr><td><span class="tag">発表</span></td><td>論文発表練習</td><td class="dl-far" data-deadline="2027-01-15">2027/1/15</td><td class="dl-far">あと92日</td><td><span class="st st-todo">未着手</span></td><td class="atext">公開審査会の予行</td><td class="mtext">金 17:00-19:00</td></tr>
+          <tr><td><span class="tag">発表</span></td><td>論文発表練習</td><td class="dl-far" data-deadline="2027-01-22">2027/1/22</td><td class="dl-far">あと99日</td><td><span class="st st-todo">未着手</span></td><td class="atext">公開審査会の予行</td><td class="mtext">金 17:00-19:00</td></tr>
+          <tr><td><span class="tag">視察</span></td><td>海外視察研修</td><td class="dl-far" data-deadline="2027-02-20">2027/2/20</td><td class="dl-far">あと128日</td><td><span class="st st-todo">未着手</span></td><td class="atext">詳細確認</td><td class="mtext">2/20-24</td></tr>
+          <tr><td><span class="tag">修了</span></td><td>PVC（OB会）</td><td class="dl-far" data-deadline="2027-03-20">2027/3/20</td><td class="dl-far">あと156日</td><td><span class="st st-todo">未着手</span></td><td></td><td class="mtext">15:00-18:00</td></tr>
+          <tr><td><span class="tag">修了</span></td><td>修了式</td><td class="dl-far" data-deadline="2027-03-25">2027/3/25</td><td class="dl-far">あと161日</td><td><span class="st st-todo">未着手</span></td><td></td><td class="mtext">16:30〜</td></tr>
         </tbody>
       </table>
     </div>
@@ -429,6 +439,8 @@
       <table class="tt">
         <thead><tr><th>カテゴリ</th><th>タスク名</th><th>完了日</th><th>ステータス</th><th>メモ</th></tr></thead>
         <tbody>
+          <tr class="row-done"><td><span class="tag">ゼミ</span></td><td>合同ゼミ（田村ゼミと合同）</td><td>10/2</td><td><span class="st st-done">完了</span></td><td class="mtext">出席完了</td></tr>
+          <tr class="row-done"><td><span class="tag">ゼミ</span></td><td>合同ゼミ（長内ゼミ発表）</td><td>10/9</td><td><span class="st st-done">完了</span></td><td class="mtext">出席完了</td></tr>
           <tr class="row-done"><td><span class="tag">勉強</span></td><td>Tutorial English 教科書購入</td><td>10/5</td><td><span class="st st-done">完了</span></td><td class="mtext">17号館B1</td></tr>
           <tr class="row-done"><td><span class="tag">ゼミ</span></td><td>横断幕を先生に渡す</td><td>10/9</td><td><span class="st st-done">完了</span></td><td class="mtext">ゼミで先生に渡した</td></tr>
           <tr class="row-done"><td><span class="tag">私生活</span></td><td>職業訓練支援金の証明書入手</td><td>10/2</td><td><span class="st st-done">完了</span></td><td class="mtext">10/2 完了</td></tr>
